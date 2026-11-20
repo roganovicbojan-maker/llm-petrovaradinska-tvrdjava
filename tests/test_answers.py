@@ -1,5 +1,7 @@
 import json
+from functools import partial
 
+import httpx
 from fastapi.testclient import TestClient
 
 from llm_petrovaradinska_tvrdjava import answers
@@ -56,37 +58,41 @@ def test_out_of_set_citation_fails_closed() -> None:
 
 
 def test_ollama_adapter_posts_evidence_and_parses_structured_answer(monkeypatch) -> None:
-    class FakeResponse:
-        status = 200
+    def handle(request: httpx.Request) -> httpx.Response:
+        assert request.method == "POST"
+        assert str(request.url) == "http://ollama.example:1234/api/chat"
+        payload = json.loads(request.content)
+        assert payload["stream"] is False
+        assert payload["format"]["type"] == "object"
+        message = json.loads(payload["messages"][1]["content"])
+        assert message["evidence"][0]["id"] == 1
+        assert "1754" in message["evidence"][0]["value"]
+        draft = DraftAnswer(claims=[AnswerClaim(text="Navod iz dosijea", evidence_ids=[1])])
+        return httpx.Response(200, json={"message": {"content": draft.model_dump_json()}})
 
-        def read(self, amount: int) -> bytes:
-            draft = DraftAnswer(claims=[AnswerClaim(text="Navod iz dosijea", evidence_ids=[1])])
-            return json.dumps({"message": {"content": draft.model_dump_json()}}).encode()
-
-    class FakeConnection:
-        def __init__(self, host: str, port: int, timeout: int) -> None:
-            assert (host, port, timeout) == ("127.0.0.1", 11434, 90)
-
-        def request(self, method: str, path: str, *, body: str, headers: dict) -> None:
-            assert (method, path) == ("POST", "/api/chat")
-            assert headers["Content-Type"] == "application/json"
-            payload = json.loads(body)
-            assert payload["stream"] is False
-            assert payload["format"]["type"] == "object"
-            message = json.loads(payload["messages"][1]["content"])
-            assert message["evidence"][0]["id"] == 1
-            assert "1754" in message["evidence"][0]["value"]
-
-        def getresponse(self) -> FakeResponse:
-            return FakeResponse()
-
-        def close(self) -> None:
-            pass
-
-    monkeypatch.setattr(answers, "HTTPConnection", FakeConnection)
+    client = partial(httpx.Client, transport=httpx.MockTransport(handle))
+    monkeypatch.setattr(answers.httpx, "Client", client)
     matches = search_dossiers(load_dossiers(), CONSTRUCTION_QUESTION)
     result = answers.generate_with_ollama(
-        "test-model", CONSTRUCTION_QUESTION, [AnswerReference(evidence_id=1, match=matches[0])]
+        "test-model",
+        CONSTRUCTION_QUESTION,
+        [AnswerReference(evidence_id=1, match=matches[0])],
+        base_url="http://ollama.example:1234",
+        timeout=20,
     )
 
     assert result.claims[0].evidence_ids == [1]
+
+
+def test_number_from_an_uncited_record_is_rejected() -> None:
+    def generate(question: str, references: list[AnswerReference]) -> DraftAnswer:
+        ids = {ref.match.observation.observation_id: ref.evidence_id for ref in references}
+        assert "artillery-nusretname" in ids
+        return DraftAnswer(
+            claims=[AnswerClaim(text="160 topova.", evidence_ids=[ids["artillery-eugene"]])]
+        )
+
+    with TestClient(create_app(generator=generate)) as client:
+        result = client.post("/api/v1/answers", json={"question": "Topova 1716"})
+    assert result.status_code == 502
+    assert "160" not in result.text

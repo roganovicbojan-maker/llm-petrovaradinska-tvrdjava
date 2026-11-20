@@ -1,6 +1,6 @@
 # Katalog izvora i tvrdnji
 
-`catalog.json` koristi verziju 2. Ugovor je definisan Pydantic modelima u
+[catalog.json](../../src/llm_petrovaradinska_tvrdjava/review_data/catalog.json) koristi verziju 2. Ugovor je definisan Pydantic modelima u
 `src/llm_petrovaradinska_tvrdjava/models.py`. Za JSON Schema pokrenite
 `validate-catalog --json-schema > catalog.schema.json`.
 
@@ -34,3 +34,12 @@ Pretvorite jedini `evidence` u listu. Odlomcima iz `supporting_evidence` i
 ulogu prema sadržaju. Isti odlomak evidentirajte jednom. Datum bez numeričke granice
 sačuvajte uz potkrepljenu normalizaciju ili kao izvorni izraz uz arheološko datovanje.
 Zatim postavite `schema_version` na `2` i pokrenite validator.
+
+## Dosijei
+
+Katalog je jedini zapis izvora i navoda. Elementi `dossiers` povezuju naslove
+i sazetke dosijea sa `claim_ids`. Za prikaz pojedinacnog navoda koristi se prvi
+dokaz i njegov opcioni `via`; ostali dokazi pripadaju urednickom katalogu.
+`editorial_review` belezi urednicku proveru prenosa navoda.
+Strucnu potvrdu tvrdnje odvojeno beleze `review` i `status`.
+Migrirani navodi bez dokumentovane provere imaju status `unknown`.

@@ -1,5 +1,5 @@
 from functools import partial
-from importlib.metadata import version
+from importlib.metadata import PackageNotFoundError, version
 from typing import Annotated, Literal
 
 from fastapi import FastAPI, HTTPException, Query
@@ -29,8 +29,16 @@ def create_app(*, generator: AnswerGenerator | None = None) -> FastAPI:
     settings = Settings.from_environment()
     generate = generator
     if generate is None and settings.ollama_model and settings.ollama_model.strip():
-        generate = partial(generate_with_ollama, settings.ollama_model.strip())
-    release = version("llm-petrovaradinska-tvrdjava")
+        generate = partial(
+            generate_with_ollama,
+            settings.ollama_model.strip(),
+            base_url=str(settings.ollama_base_url),
+            timeout=settings.ollama_timeout,
+        )
+    try:
+        release = version("llm-petrovaradinska-tvrdjava")
+    except PackageNotFoundError:
+        release = "0+local"
     app = FastAPI(title="LLM Petrovaradinska tvrđava", version=release, debug=settings.debug)
 
     @app.get("/health")
@@ -72,6 +80,3 @@ def create_app(*, generator: AnswerGenerator | None = None) -> FastAPI:
         return render_dossier(review_data(dossier_id))
 
     return app
-
-
-app = create_app()

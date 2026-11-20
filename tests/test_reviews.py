@@ -4,8 +4,8 @@ import pytest
 from fastapi.testclient import TestClient
 from pydantic import ValidationError
 
-from llm_petrovaradinska_tvrdjava.api import app
-from llm_petrovaradinska_tvrdjava.review_page import render_dossier
+from llm_petrovaradinska_tvrdjava.api import create_app
+from llm_petrovaradinska_tvrdjava.catalog import load_catalog
 from llm_petrovaradinska_tvrdjava.reviews import Dossier, load_demo_dossier
 from tools.review_comparison import main
 
@@ -13,14 +13,16 @@ DOSSIER_ID = "petrovaradin-1716"
 
 
 def test_review_keeps_different_source_values_and_provenance() -> None:
-    with TestClient(app) as client:
+    with TestClient(create_app()) as client:
         response = client.get(f"/api/v1/reviews/{DOSSIER_ID}")
         page = client.get(f"/reviews/{DOSSIER_ID}")
         missing = client.get("/reviews/unknown")
 
     assert response.status_code == page.status_code == 200
     assert missing.status_code == 404
-    agreement, artillery = response.json()["comparisons"]
+    agreement, artillery, map_history, losses = response.json()["comparisons"]
+    assert map_history["observations"][0]["citation"]["source_id"] == "rct-rcin-727006"
+    assert losses["observations"][0]["via"]["source_id"] == "karagoz-2014"
     assert len({row["value"] for row in agreement["observations"]}) == 1
     assert len({row["value"] for row in artillery["observations"]}) == 3
     osman = artillery["observations"][1]
@@ -41,7 +43,7 @@ def test_bad_intermediary_is_rejected() -> None:
 def test_editor_can_record_a_review_without_changing_the_observation(tmp_path: Path) -> None:
     path = tmp_path / "review.json"
     dossier = load_demo_dossier()
-    path.write_text(dossier.model_dump_json(), encoding="utf-8")
+    path.write_text(load_catalog().model_dump_json(), encoding="utf-8")
 
     assert (
         main(
@@ -62,17 +64,17 @@ def test_editor_can_record_a_review_without_changing_the_observation(tmp_path: P
         == 0
     )
 
-    updated = Dossier.model_validate_json(path.read_bytes())
-    row = updated.comparisons[1].observations[1]
-    assert row.value == dossier.comparisons[1].observations[1].value
-    assert row.review is not None
-    assert row.review.verdict == "needs_context"
-    assert "&lt;Check folio&gt;" in render_dossier(updated)
+    updated = load_catalog(path)
+    claim = next(item for item in updated.claims if item.claim_id == "artillery-nusretname")
+    assert claim.text == dossier.comparisons[1].observations[1].value
+    assert claim.editorial_review is not None
+    assert claim.editorial_review.verdict == "needs_context"
+    assert claim.editorial_review.note == "<Check folio>"
 
 
 def test_construction_dossier_and_search_share_the_public_review_routes() -> None:
     dossier_id = "petrovaradin-gradnja-1753-1754"
-    with TestClient(app) as client:
+    with TestClient(create_app()) as client:
         index = client.get("/reviews")
         construction = client.get(f"/api/v1/reviews/{dossier_id}")
         page = client.get(f"/reviews/{dossier_id}")
@@ -104,6 +106,31 @@ def test_construction_dossier_and_search_share_the_public_review_routes() -> Non
 
 
 @pytest.mark.parametrize(
+    "question", ["Koliko je stanovnika imao Petrovaradin 1716?", "Petrovaradin on Mars"]
+)
+def test_location_and_year_alone_do_not_match_an_unrelated_query(question: str) -> None:
+    with TestClient(create_app()) as client:
+        result = client.get("/api/v1/review-search", params={"q": question})
+        answer = client.post("/api/v1/answers", json={"question": question})
+
+    assert result.json() == []
+    assert answer.status_code == 200
+    assert answer.json()["status"] == "insufficient_evidence"
+
+
+def test_historical_place_alias_and_mediated_sacral_evidence() -> None:
+    with TestClient(create_app()) as client:
+        duel = client.get("/api/v1/review-search", params={"q": "Peterwardein 1694"})
+        common_name = client.get("/api/v1/review-search", params={"q": "Petrovaradin 1694"})
+        icon = client.get("/api/v1/review-search", params={"q": "Marija Pomocnica"})
+
+    assert duel.json() == common_name.json()
+    assert duel.json()[0]["dossier_id"] == "petrovaradin-opsada-1694"
+    assert icon.json()[0]["observation"]["citation"]["source_id"] == "matos-1987"
+    assert icon.json()[0]["intermediary"]["source_id"] == "skoric-2011"
+
+
+@pytest.mark.parametrize(
     ("dossier_id", "question", "observation_id"),
     [
         ("petrovaradin-paleolit", "90.000 godina 2b", "paleolit-2b-90ka"),
@@ -118,7 +145,7 @@ def test_construction_dossier_and_search_share_the_public_review_routes() -> Non
 def test_additional_dossiers_link_to_searchable_evidence(
     dossier_id: str, question: str, observation_id: str
 ) -> None:
-    with TestClient(app) as client:
+    with TestClient(create_app()) as client:
         index = client.get("/reviews")
         page = client.get(f"/reviews/{dossier_id}")
         response = client.get("/api/v1/review-search", params={"q": question})

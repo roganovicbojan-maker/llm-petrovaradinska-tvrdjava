@@ -1,18 +1,11 @@
 import re
 import unicodedata
-from importlib.resources import files
 from typing import Annotated, Literal, Self
 
 from pydantic import Field, HttpUrl, model_validator
 
-from .models import RECORD_ID_PATTERN, Record, RecordId, Review, Text
-
-ReviewVerdict = Literal["verified", "needs_context"]
-
-
-class SourceReview(Review):
-    verdict: ReviewVerdict
-    note: Text
+from .catalog import load_catalog
+from .models import RECORD_ID_PATTERN, Citation, Record, RecordId, SourceReview, Text
 
 
 class DossierSource(Record):
@@ -21,11 +14,6 @@ class DossierSource(Record):
     tradition: Text
     kind: Literal["primary", "secondary", "map"]
     url: HttpUrl | None = None
-
-
-class Citation(Record):
-    source_id: RecordId
-    locator: Text
 
 
 class Observation(Record):
@@ -73,11 +61,10 @@ class Dossier(Record):
 def load_dossier(dossier_id: str) -> Dossier:
     if re.fullmatch(RECORD_ID_PATTERN, dossier_id) is None:
         raise FileNotFoundError(dossier_id)
-    resource = files(__package__).joinpath("review_data", f"{dossier_id}.json")
-    dossier = Dossier.model_validate_json(resource.read_bytes())
-    if dossier.dossier_id != dossier_id:
-        raise ValueError(f"Dossier ID does not match filename: {dossier_id}")
-    return dossier
+    for dossier in load_dossiers():
+        if dossier.dossier_id == dossier_id:
+            return dossier
+    raise FileNotFoundError(dossier_id)
 
 
 def load_demo_dossier() -> Dossier:
@@ -85,12 +72,58 @@ def load_demo_dossier() -> Dossier:
 
 
 def load_dossiers() -> list[Dossier]:
-    directory = files(__package__).joinpath("review_data")
-    return [
-        load_dossier(resource.name.removesuffix(".json"))
-        for resource in sorted(directory.iterdir(), key=lambda entry: entry.name)
-        if resource.is_file() and resource.name.endswith(".json")
-    ]
+    catalog = load_catalog()
+    claims = {claim.claim_id: claim for claim in catalog.claims}
+    sources = {source.source_id: source for source in catalog.sources}
+    dossiers = []
+    for definition in catalog.dossiers:
+        groups: dict[str, list[Observation]] = {}
+        source_ids: dict[str, None] = {}
+        for claim_id in definition.claim_ids:
+            claim = claims[claim_id]
+            evidence = claim.evidence[0]
+            source_ids[evidence.source_id] = None
+            if evidence.via:
+                source_ids[evidence.via.source_id] = None
+            groups.setdefault(claim.topic, []).append(
+                Observation(
+                    observation_id=claim_id,
+                    citation=Citation(source_id=evidence.source_id, locator=evidence.locator),
+                    via=evidence.via,
+                    value=claim.text,
+                    context=evidence.passage,
+                    review=claim.editorial_review,
+                )
+            )
+        dossier_sources = []
+        for source_id in source_ids:
+            source = sources[source_id]
+            kind: Literal["primary", "secondary", "map"] = "secondary"
+            if source.source_type == "map":
+                kind = "map"
+            elif source.source_class == "primary":
+                kind = "primary"
+            dossier_sources.append(
+                DossierSource(
+                    source_id=source_id,
+                    title=source.title,
+                    tradition=source.tradition or source.author_or_institution,
+                    kind=kind,
+                    url=source.url,
+                )
+            )
+        dossiers.append(
+            Dossier(
+                dossier_id=definition.dossier_id,
+                title=definition.title,
+                summary=definition.summary,
+                sources=dossier_sources,
+                comparisons=[
+                    Comparison(topic=topic, observations=rows) for topic, rows in groups.items()
+                ],
+            )
+        )
+    return dossiers
 
 
 class ReviewMatch(Record):
@@ -103,7 +136,45 @@ class ReviewMatch(Record):
 
 
 TOKEN_PATTERN = re.compile(r"[^\W_]+")
-QUESTION_WORDS = {"je", "za", "sto", "sta", "su", "na", "iz", "od", "ko", "kod", "koje", "kako"}
+QUESTION_WORDS = {
+    "je",
+    "za",
+    "sto",
+    "sta",
+    "su",
+    "na",
+    "iz",
+    "od",
+    "ko",
+    "kod",
+    "koje",
+    "koja",
+    "kako",
+    "koliko",
+    "kada",
+    "bilo",
+    "bila",
+    "imao",
+    "se",
+    "da",
+    "on",
+}
+SEARCH_ALIASES = {
+    "peterwardein": "petrovaradin",
+    "petervarad": "petrovaradin",
+    "petervaradin": "petrovaradin",
+    "varadin": "petrovaradin",
+    "predlozeno": "predlozeni",
+    "pomocnice": "pomocnica",
+}
+QUERY_CONTEXT = {
+    "petrovaradin",
+    "petrovaradina",
+    "petrovaradinu",
+    "tvrdjava",
+    "tvrdjave",
+    "tvrdjavi",
+}
 
 
 SERBIAN_CYRILLIC = str.maketrans(
@@ -153,7 +224,11 @@ def search_terms(text: str) -> set[str]:
         "NFKD", text.casefold().translate(SERBIAN_CYRILLIC).replace("đ", "dj")
     )
     normalized = "".join(letter for letter in normalized if not unicodedata.combining(letter))
-    return {word for word in TOKEN_PATTERN.findall(normalized) if len(word) > 1} - QUESTION_WORDS
+    return {
+        SEARCH_ALIASES.get(word, word)
+        for word in TOKEN_PATTERN.findall(normalized)
+        if len(word) > 1
+    } - QUESTION_WORDS
 
 
 def search_dossiers(dossiers: list[Dossier], query: str) -> list[ReviewMatch]:
@@ -161,6 +236,7 @@ def search_dossiers(dossiers: list[Dossier], query: str) -> list[ReviewMatch]:
     if not terms:
         return []
 
+    topical_terms = {term for term in terms - QUERY_CONTEXT if not term.isdecimal()}
     matches = []
     for dossier in dossiers:
         sources = {source.source_id: source for source in dossier.sources}
@@ -174,6 +250,10 @@ def search_dossiers(dossiers: list[Dossier], query: str) -> list[ReviewMatch]:
                 evidence_terms = search_terms(
                     f"{row.context} {row.citation.locator} {source.title} {source.tradition}"
                 )
+                if topical_terms and not topical_terms & (
+                    value_terms | topic_terms | evidence_terms | dossier_terms
+                ):
+                    continue
                 score = (
                     4 * len(terms & value_terms)
                     + 2 * len(terms & (topic_terms | evidence_terms))

@@ -2,6 +2,34 @@
 
 Osnova za javno dostupan sistem znanja o Petrovaradinu i Petrovaradinskoj tvrđavi. Projekat ima validiran katalog, HTTP API i pregled istorijskih navoda po izvorima.
 
+## Portfolio quick start (English)
+
+This Python/FastAPI project lets readers search five historical dossiers and inspect
+source references, conflicting figures, and intermediary works such as translations or
+later studies. The review UI and its tests run without credentials or a language model.
+
+From the repository root, with Python 3.12 or later:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate        # macOS / Linux
+# On Windows Git Bash use: source .venv/Scripts/activate
+python -m pip install -e ".[dev]"
+python -m pytest -q
+python -m uvicorn llm_petrovaradinska_tvrdjava.api:create_app --factory
+```
+
+- [Search historical dossiers](http://127.0.0.1:8000/reviews?q=Peterwardein+1694).
+- [Compare accounts of the 1716 battle](http://127.0.0.1:8000/reviews/petrovaradin-1716).
+- [Open the API documentation](http://127.0.0.1:8000/docs).
+
+Try searching for `topova 1716` and then `Koliko je stanovnika imao Petrovaradin 1716?`.
+The second question has no supporting records in the current dossiers.
+
+The optional Ollama adapter generates structured claims from retrieved records. The API
+validates each evidence ID and checks that numeric tokens appear in the cited records. Historical
+support is reviewed separately. The public dossiers are projected from the versioned catalog. See the [local model setup](#rag-odgovori-uz-lokalni-model).
+
 ## Instalacija u PowerShell-u
 
 Iz korena repozitorijuma, uz instaliran **Python 3.12**. Ako ga Windows launcher ne pronalazi, u prvoj komandi zamenite `py -3.12` punom putanjom uz operator `&`, na primer `& "C:\putanja\do\Python312\python.exe" -m venv .venv`. Pozivi preko pune putanje do interpretera rade i kada PowerShell blokira aktivaciju okruženja.
@@ -10,7 +38,7 @@ Iz korena repozitorijuma, uz instaliran **Python 3.12**. Ako ga Windows launcher
 py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -e ".[dev]"
 if (-not (Test-Path .env)) { Copy-Item .env.example .env }
-.\.venv\Scripts\python.exe -m uvicorn llm_petrovaradinska_tvrdjava.api:app --host 127.0.0.1 --port 8000
+.\.venv\Scripts\python.exe -m uvicorn llm_petrovaradinska_tvrdjava.api:create_app --factory --host 127.0.0.1 --port 8000
 ```
 
 Ako `.env` već postoji, preskočite kopiranje. U drugom PowerShell prozoru pokrenite `Invoke-RestMethod http://127.0.0.1:8000/health`. Očekivani JSON je `{"status":"ok","version":"0.1.0"}`.
@@ -19,23 +47,15 @@ Ako `.env` već postoji, preskočite kopiranje. U drugom PowerShell prozoru pokr
 
 1. Otvorite koren repozitorijuma. Napravite `.venv` prema prethodnom postupku.
 2. U **Settings → Project → Python Interpreter** izaberite postojeći interpreter `.venv\Scripts\python.exe`.
-3. U **Run → Edit Configurations** dodajte **Python** konfiguraciju. Za **Module name** unesite `uvicorn`, za **Parameters** unesite `llm_petrovaradinska_tvrdjava.api:app --host 127.0.0.1 --port 8000`, a za **Working directory** postavite koren repozitorijuma.
+3. U **Run → Edit Configurations** dodajte **Python** konfiguraciju. Za **Module name** unesite `uvicorn`, za **Parameters** unesite `llm_petrovaradinska_tvrdjava.api:create_app --factory --host 127.0.0.1 --port 8000`, a za **Working directory** postavite koren repozitorijuma.
 4. Pokrenite konfiguraciju i otvorite [health endpoint](http://127.0.0.1:8000/health).
 
 ## Demo za portfolio
 
-**Portfolio overview (EN)**
-
-A Python/FastAPI prototype for historical research. The review interface lets readers compare
-evidence, inspect source locators, and distinguish original sources from later editions or
-translations. The optional Ollama integration retrieves evidence from five curated dossiers,
-sends it to a local model, and validates the structure and evidence IDs of the output. The review
-pages and automated tests run without a model.
-
 U PyCharm terminalu koji koristi Git Bash, iz korena repozitorijuma:
 
 ```bash
-./.venv/Scripts/python.exe -m uvicorn llm_petrovaradinska_tvrdjava.api:app --host 127.0.0.1 --port 8000
+./.venv/Scripts/python.exe -m uvicorn llm_petrovaradinska_tvrdjava.api:create_app --factory --host 127.0.0.1 --port 8000
 ```
 
 Otvorite [pregled i pretragu dosijea](http://127.0.0.1:8000/reviews).
@@ -66,11 +86,12 @@ preuzmite model sa podrškom za strukturirani izlaz:
 ```bash
 ollama pull qwen3:4b
 export FORTRESS_OLLAMA_MODEL=qwen3:4b
-./.venv/Scripts/python.exe -m uvicorn llm_petrovaradinska_tvrdjava.api:app
+./.venv/Scripts/python.exe -m uvicorn llm_petrovaradinska_tvrdjava.api:create_app --factory
 ```
 
 Umesto `export` možete upisati `FORTRESS_OLLAMA_MODEL=qwen3:4b` u `.env`.
-Ollama mora da sluša na `127.0.0.1:11434`. JSON API prihvata
+Za drugi Ollama servis podesite FORTRESS_OLLAMA_BASE_URL i FORTRESS_OLLAMA_TIMEOUT.
+Podrazumevano Ollama sluša na `127.0.0.1:11434`. JSON API prihvata
 `POST /api/v1/answers` sa telom `{"question":"Šta je predloženo za 1754?"}`.
 
 Predložena demo pitanja

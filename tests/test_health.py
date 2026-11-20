@@ -1,9 +1,10 @@
 from fastapi.testclient import TestClient
 
-from llm_petrovaradinska_tvrdjava.api import app
+from llm_petrovaradinska_tvrdjava.api import create_app
 
 
 def test_health() -> None:
+    app = create_app()
     with TestClient(app) as client:
         response = client.get("/health")
 

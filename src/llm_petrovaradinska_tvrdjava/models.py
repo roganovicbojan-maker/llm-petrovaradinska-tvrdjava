@@ -197,8 +197,14 @@ class Evidence(Record):
     transcription: Literal["original_checked", "unverified_ocr", "unverified"]
 
 
+class Citation(Record):
+    source_id: RecordId
+    locator: Text
+
+
 class EvidenceLink(Evidence):
     role: Literal["supports", "contradicts", "context"]
+    via: Citation | None = None
 
 
 class Estimate(Record):
@@ -227,6 +233,11 @@ class Review(Record):
     reviewer: Text
 
 
+class SourceReview(Review):
+    verdict: Literal["verified", "needs_context"]
+    note: Text
+
+
 class Claim(Record):
     claim_id: RecordId
     text: Text
@@ -239,6 +250,7 @@ class Claim(Record):
     confidence: Confidence = "unassessed"
     disagreement_notes: Text | None = None
     review: Review | None = None
+    editorial_review: SourceReview | None = None
     estimate: Estimate | None = None
 
     @model_validator(mode="after")
@@ -257,18 +269,35 @@ class Claim(Record):
         return self
 
 
+class DossierDefinition(Record):
+    dossier_id: RecordId
+    title: Text
+    summary: Text
+    claim_ids: Annotated[list[RecordId], Field(min_length=1)]
+
+
 class Catalog(Record):
     schema_version: Literal[2]
     sources: list[Source]
     claims: list[Claim]
+    dossiers: list[DossierDefinition] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def check_references(self) -> Self:
         sources = {source.source_id: source for source in self.sources}
         if len(sources) != len(self.sources):
             raise ValueError("Duplicate source_id")
-        if len({claim.claim_id for claim in self.claims}) != len(self.claims):
+        claims = {claim.claim_id: claim for claim in self.claims}
+        if len(claims) != len(self.claims):
             raise ValueError("Duplicate claim_id")
+        if len({dossier.dossier_id for dossier in self.dossiers}) != len(self.dossiers):
+            raise ValueError("Duplicate dossier_id")
+        for dossier in self.dossiers:
+            if len(set(dossier.claim_ids)) != len(dossier.claim_ids):
+                raise ValueError(f"{dossier.dossier_id}: duplicate dossier claim_id")
+            for claim_id in dossier.claim_ids:
+                if claim_id not in claims:
+                    raise ValueError(f"{dossier.dossier_id}: unknown claim_id {claim_id}")
 
         for source in self.sources:
             for parent in source.derived_from:
@@ -290,17 +319,22 @@ class Catalog(Record):
         for claim in self.claims:
             supporting_roots = []
             for passage in claim.evidence:
-                source = sources.get(passage.source_id)
+                evidence_source = sources.get(passage.source_id)
                 context = f"{claim.claim_id} / {passage.source_id}"
-                if source is None:
+                if evidence_source is None:
                     raise ValueError(f"{context}: unknown source_id")
-                if source.use == "discovery_only":
+                if evidence_source.use == "discovery_only":
                     raise ValueError(f"{context}: discovery-only source cannot be evidence")
+                if passage.via:
+                    if passage.via.source_id not in sources:
+                        raise ValueError(f"{context}: Unknown intermediary")
+                    if passage.via.source_id == passage.source_id:
+                        raise ValueError(f"{context}: a source cannot be its own intermediary")
                 if claim.status != "unknown" and passage.transcription != "original_checked":
                     raise ValueError(f"{context}: assessed claims require checked passages")
                 if (
                     passage.passage_kind == "quotation"
-                    and source.copyright_status not in {"public_domain", "open_license"}
+                    and evidence_source.copyright_status not in {"public_domain", "open_license"}
                     and len(WORD_PATTERN.findall(passage.passage)) > QUOTATION_WORD_LIMIT
                 ):
                     raise ValueError(f"{context}: quotation exceeds {QUOTATION_WORD_LIMIT} words")

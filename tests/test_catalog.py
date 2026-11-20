@@ -64,9 +64,7 @@ def claim(source: Source) -> Claim:
 
 
 def test_checked_in_catalog(capsys: pytest.CaptureFixture[str]) -> None:
-    catalog_path = Path(__file__).resolve().parents[1] / "data" / "catalog" / "catalog.json"
-
-    assert main([str(catalog_path)]) == 0
+    assert main([]) == 0
     assert "valid" in capsys.readouterr().out
 
 
