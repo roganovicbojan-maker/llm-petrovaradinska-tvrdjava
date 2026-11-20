@@ -6,9 +6,10 @@ from importlib.metadata import PackageNotFoundError, version
 from threading import BoundedSemaphore
 from typing import Annotated, Literal
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Response
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, ValidationError
+from starlette.concurrency import run_in_threadpool
 
 from .answers import (
     AnswerGenerator,
@@ -22,8 +23,10 @@ from .answers import (
     verify_with_ollama,
 )
 from .catalog import load_catalog
+from .embeddings import EmbeddingError
 from .models import Catalog
 from .operations import RequestLimits
+from .retrieval import DenseIndex, Embedder, configured_embedder, fuse_rankings
 from .review_page import render_dossier, render_review_index
 from .reviews import Dossier, ReviewMatch, load_dossiers, search_dossiers
 from .settings import Settings
@@ -40,11 +43,13 @@ def create_app(
     *,
     generator: AnswerGenerator | None = None,
     verifier: AnswerVerifier | None = None,
+    embedder: Embedder | None = None,
     settings: Settings | None = None,
     catalog_loader: Callable[[], Catalog] = load_catalog,
 ) -> FastAPI:
     if settings is None:
         settings = Settings.from_environment()
+    embed = embedder if embedder is not None else configured_embedder(settings)
     generate = generator
     if generate is None and settings.ollama_model and settings.ollama_model.strip():
         generate = partial(
@@ -66,19 +71,28 @@ def create_app(
         release = "0+local"
 
     cached: list[Dossier] | None = None
+    index: DenseIndex | None = None
     slots = BoundedSemaphore(settings.max_concurrent_generations)
 
     @asynccontextmanager
     async def lifespan(_: FastAPI) -> AsyncIterator[None]:
-        nonlocal cached
+        nonlocal cached, index
         try:
             cached = load_dossiers(catalog_loader())
         except (OSError, ValidationError):
             logger.exception("Catalog failed to load")
+        if cached and embed is not None:
+            try:
+                index = await run_in_threadpool(DenseIndex.build, cached, embed)
+            except EmbeddingError:
+                logger.warning(
+                    "Embedding index unavailable; using lexical retrieval", exc_info=True
+                )
         try:
             yield
         finally:
             cached = None
+            index = None
 
     def get_dossiers() -> list[Dossier]:
         if not cached:
@@ -104,12 +118,20 @@ def create_app(
     @app.get("/ready")
     def readiness() -> dict[str, str | bool]:
         get_dossiers()
-        return {"status": "ready", "generation_configured": generate is not None}
+        status: dict[str, str | bool] = {
+            "status": "ready",
+            "generation_configured": generate is not None,
+        }
+        if embed is not None:
+            status["retrieval"] = "hybrid" if index is not None else "lexical_fallback"
+        return status
 
     @app.post("/api/v1/answers", response_model_exclude_none=True)
-    def create_answer(request: AnswerQuestion) -> AnswerResult:
+    def create_answer(request: AnswerQuestion, response: Response) -> AnswerResult:
         matches = search_dossiers(get_dossiers(), request.question)
-        if not matches:
+        retrieval = "lexical_fallback" if embed is not None else "lexical"
+        response.headers["X-Fortress-Retrieval"] = retrieval
+        if not matches and index is None:
             return AnswerResult(status="insufficient_evidence")
         if generate is None:
             raise HTTPException(status_code=503, detail="Podesi lokalni Ollama model u .env.")
@@ -120,6 +142,15 @@ def create_app(
                 headers={"Retry-After": "1"},
             )
         try:
+            if index is not None:
+                try:
+                    dense = index.search(
+                        request.question, min_similarity=settings.embedding_min_similarity
+                    )
+                    matches = fuse_rankings(matches, dense)
+                    response.headers["X-Fortress-Retrieval"] = "hybrid"
+                except EmbeddingError:
+                    logger.warning("Embedding query failed; using lexical retrieval", exc_info=True)
             return answer_question(request.question, matches, generate, verifier)
         except ModelUnavailableError as error:
             logger.warning("Ollama generation unavailable", exc_info=error)
