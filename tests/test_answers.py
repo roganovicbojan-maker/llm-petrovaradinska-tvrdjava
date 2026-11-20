@@ -273,3 +273,68 @@ def test_configured_ollama_verifier_is_a_separate_pass(monkeypatch, verdict, exp
     if verdict is True:
         assert result.json()["verification"] == "model_checked"
         assert result.json()["claims"][0]["source_id"] == "eugene-report-56"
+
+
+def test_numeric_lists_dates_and_ranges() -> None:
+    from llm_petrovaradinska_tvrdjava.numbers import numeric_ranges, numeric_tokens
+
+    assert numeric_tokens("tri i četiri") == {"3", "4"}
+    assert numeric_tokens("dvadeset i trideset") == {"20", "30"}
+    assert numeric_tokens("sto šezdeset") == {"160"}
+    assert numeric_tokens("6\u202f000–7\u202f000") == {"6000", "7000"}
+    assert numeric_ranges("од сто до сто шездесет") == {("100", "160")}
+    assert numeric_ranges("od 6.000 do 7.000; 1716-08-05") == {("6000", "7000")}
+
+
+def test_range_cannot_be_synthesized_from_separate_quantities() -> None:
+    from llm_petrovaradinska_tvrdjava.reviews import iter_review_matches
+
+    match = next(
+        row
+        for row in iter_review_matches(load_dossiers())
+        if row.observation.observation_id == "artillery-eugene"
+    )
+    row = match.observation.model_copy(update={"value": "100 topova i 160 vozila"})
+    matches = [match.model_copy(update={"observation": row})]
+
+    def generate(question: str, references: list[AnswerReference]) -> DraftAnswer:
+        return DraftAnswer(
+            claims=[
+                AnswerClaim(
+                    text="100–160 topova.",
+                    evidence_ids=[1],
+                    source_id="eugene-report-56",
+                )
+            ]
+        )
+
+    with pytest.raises(answers.InvalidAnswerError, match="unsupported range"):
+        answers.answer_question("Topovi", matches, generate, lambda checks: [True])
+
+
+def test_answer_preserves_estimate_scope_and_citations() -> None:
+    from llm_petrovaradinska_tvrdjava.reviews import iter_review_matches
+
+    matches = [
+        match
+        for match in iter_review_matches(load_dossiers())
+        if match.observation.observation_id.startswith("artillery-")
+    ]
+
+    def generate(question: str, references: list[AnswerReference]) -> DraftAnswer:
+        return DraftAnswer(
+            claims=[
+                AnswerClaim(
+                    text=matches[0].observation.value,
+                    source_id="eugene-report-56",
+                    evidence_ids=[1],
+                )
+            ]
+        )
+
+    answer = answers.answer_question("Topovi 1716?", matches, generate)
+    assert answer.estimate_comparisons is not None
+    estimates = answer.estimate_comparisons[0].estimates
+    assert [int(item.estimate.value) for item in estimates] == [100, 160, 175]
+    assert len({item.citation.source_id for item in estimates}) == 3
+    assert len({item.estimate.counting_definition for item in estimates}) == 3

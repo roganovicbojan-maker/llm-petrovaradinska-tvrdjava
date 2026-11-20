@@ -113,6 +113,11 @@ Predložena demo pitanja
 - Kada je vojna bolnica smeštena u samostan?
 - Koliko je bilo stanovnika u Vinči 2024?
 
+### Priprema PDF izvora
+
+Ekstrakcija po stranama, označavanje strana za OCR i izrada lokalnog nacrta
+opisani su u [postupku uredničkog pregleda PDF izvora](docs/pdf-ingestion.md).
+
 ### Opciona hibridna pretraga
 
 Odgovori po podrazumevanom podešavanju koriste leksičku pretragu. Za lokalni
