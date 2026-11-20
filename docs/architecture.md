@@ -24,13 +24,16 @@ makro Recall@5, MRR@5 i udeo negativnih upita bez rezultata. Skup je regresioni
 pilot nad postojećim dosijeima. Za ocenu istorijske relevantnosti na široj
 građi potreban je nezavisno označen stručni korpus.
 
-Generator dobija pronađene navode sa ulogama dokaza. Provera odgovora odbija
-reference van pronađenog skupa i brojeve kojih nema u citiranim navodima.
-Vrednost `verification: structural_only` označava obim automatske provere.
-Urednik proverava da li odlomak podržava celu tvrdnju, da li zaključak prenosi
-suprotne dokaze u kontekstu i da li su kalendar, izdanje i prevod odgovarajući.
-Ocena i datum stručnog pregleda čuvaju se u katalogu. Nove istorijske ocene
-nastaju pregledom građe.
+Generator dobija pronađene navode sa ulogama dokaza. Svaki iskaz u odgovoru ima
+jedan izvor (source_id) i ID-jeve potkrepljujućih navoda (evidence_ids). Provera
+odbija reference van pretrage i brojeve (uključujući uobičajene srpske oblike
+rečima) kojih nema u citiranim dokazima tog izvora. Odvojeni poziv Ollami
+ocenjuje da li dokazi podržavaju ceo iskaz, pripisivanje i ograde. Ako provera
+ne prođe, odgovor se odbija. API označava rezultat kao model_checked.
+Kada se koristi prilagođeni generator bez verifikatora, prihvataju se samo
+iskazi koji se poklapaju sa tekstom citiranog kataloga (catalog_excerpt).
+Automatske provere mogu pogrešiti. Istorijski status i stručna provera prikazuju
+se prema katalogu.
 
 ## Pokretanje i opterećenje
 

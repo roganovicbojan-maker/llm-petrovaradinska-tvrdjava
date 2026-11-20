@@ -44,7 +44,9 @@
         answerStatus.textContent = "Dostupni dosijei nemaju dovoljno dokaza za odgovor.";
         return;
       }
-      answerStatus.textContent = "Generisan odgovor · strukturna provera citata i brojeva";
+      answerStatus.textContent = data.verification === "model_checked"
+        ? "Generisan odgovor. Podršku iskazu proverio je model."
+        : "Generisan odgovor. Iskaz se poklapa sa citiranim zapisom.";
       const references = new Map(data.references.map(ref => [ref.evidence_id, ref.match]));
       const list = document.createElement("ul");
       for (const claim of data.claims) {
@@ -56,11 +58,13 @@
         const sources = document.createElement("ul");
         for (const id of claim.evidence_ids) {
           const match = references.get(id);
+          const cited = match.observation.evidence.filter(evidence =>
+            evidence.role === "supports" && evidence.source_id === claim.source_id);
           const source = document.createElement("li");
           const link = document.createElement("a");
           link.href = "/reviews/" + encodeURIComponent(match.dossier_id) + "#" +
             encodeURIComponent(match.observation.observation_id);
-          link.textContent = match.source.title + " · " + match.observation.citation.locator;
+          link.textContent = cited[0].source.title + " · " + cited.map(e => e.locator).join(", ");
           source.append(link);
           const status = document.createElement("small");
           status.textContent = match.observation.expert_review
@@ -74,10 +78,11 @@
               + " · " + evidence.locator;
             source.append(entry);
           }
-          if (match.intermediary) {
+          for (const evidence of cited) {
+            if (!evidence.intermediary) continue;
             const via = document.createElement("small");
-            via.textContent = "Prema posredniku: " + match.intermediary.title + " · " +
-              match.observation.via.locator;
+            via.textContent = "Prema posredniku: " + evidence.intermediary.title +
+              " · " + evidence.via.locator;
             source.append(via);
           }
           sources.append(source);

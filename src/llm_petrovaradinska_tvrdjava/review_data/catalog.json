@@ -83,7 +83,7 @@
       "source_class": "secondary",
       "use": "evidence",
       "language": "tr",
-      "script": "Zzzz",
+      "script": "Latn",
       "tradition": "Turska istoriografija",
       "availability": "online",
       "copyright_status": "unknown",
@@ -93,7 +93,8 @@
         "nusretname",
         "vienna-inventory-viii-56a",
         "browne-campaign-1716-1718"
-      ]
+      ],
+      "accessed_on": "2026-11-20"
     },
     {
       "source_id": "banlaky-xix-3",
@@ -198,7 +199,8 @@
       "availability": "online",
       "copyright_status": "unknown",
       "ocr_status": "unknown",
-      "url": "https://militarymaps.rct.uk/ottoman-habsburg-wars-1521-1791/map-of-belgrade-peterwardein-and-temeswar-1716-belgrade-central-serbia-serbia-44deg4814n-20deg2754e"
+      "url": "https://militarymaps.rct.uk/ottoman-habsburg-wars-1521-1791/map-of-belgrade-peterwardein-and-temeswar-1716-belgrade-central-serbia-serbia-44deg4814n-20deg2754e",
+      "accessed_on": "2026-11-20"
     },
     {
       "source_id": "browne-campaign-1716-1718",
@@ -436,12 +438,30 @@
       "source_class": "secondary",
       "use": "evidence",
       "language": "hu",
-      "script": "Zzzz",
+      "script": "Latn",
       "tradition": "Mađarska srednjovekovna arheologija",
       "availability": "online",
       "copyright_status": "unknown",
       "ocr_status": "unknown",
-      "url": "https://www.vamadia.rs/sites/default/files/2020-02/a%20belakuti-petervaradi%20ciszterci%20monostor.pdf"
+      "url": "https://www.vamadia.rs/sites/default/files/2020-02/a%20belakuti-petervaradi%20ciszterci%20monostor.pdf",
+      "accessed_on": "2026-11-20"
+    },
+    {
+      "source_id": "rct-catalog-727006",
+      "title": "Royal Collection Trust, catalog description RCIN 727006",
+      "bibliography": "Royal Collection Trust, Map of Belgrade, Peterwardein and Temeswar, RCIN 727006, catalog entry",
+      "author_or_institution": "Royal Collection Trust",
+      "source_type": "web",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "en",
+      "script": "Latn",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "tradition": "Savremeni muzejski katalog",
+      "url": "https://militarymaps.rct.uk/ottoman-habsburg-wars-1521-1791/map-of-belgrade-peterwardein-and-temeswar-1716-belgrade-central-serbia-serbia-44deg4814n-20deg2754e",
+      "accessed_on": "2026-11-20",
+      "ocr_status": "not_applicable"
     }
   ],
   "claims": [
@@ -454,7 +474,11 @@
         "modern_name": "Petrovaradinska tvrđava, Novi Sad",
         "aliases": [
           "Petrovaradinska tvrđava",
-          "Петроварадинска тврђава"
+          "Петроварадинска тврђава",
+          "Peterwardein",
+          "Petervaradin",
+          "Pétervárad",
+          "Varadin"
         ]
       },
       "evidence": [
@@ -1078,6 +1102,108 @@
         }
       ],
       "status": "unknown"
+    },
+    {
+      "claim_id": "battle-losses-ottoman-karagoz",
+      "text": "Karagöz navodi oko 6.000 gubitaka osmanske vojske u bici 1716.",
+      "topic": "Procene gubitaka",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "karagoz-2014",
+          "locator_kind": "page",
+          "locator": "Str. 95, glavni tekst i fusnota 60",
+          "passage_kind": "paraphrase",
+          "passage": "Karagöz izdvaja oko šest hiljada kao procenu osmanskih gubitaka i u fusnoti pominje različite druge procene.",
+          "passage_language": "sr-Latn",
+          "transcription": "original_checked",
+          "role": "supports"
+        }
+      ],
+      "status": "unknown",
+      "estimate": {
+        "value": "6000",
+        "unit": "vojnika",
+        "counted_population": "Osmanska vojska",
+        "counting_definition": "Gubici prema navodu u glavnom tekstu; obuhvat nije razložen po kategorijama",
+        "approximate": true
+      }
+    },
+    {
+      "claim_id": "battle-losses-ottoman-browne",
+      "text": "Prema navodu koji Karagöz pripisuje Browneu, osmanski gubici su procenjeni na oko 30.000.",
+      "topic": "Procene gubitaka",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "browne-campaign-1716-1718",
+          "locator_kind": "page",
+          "locator": "Str. 26, prema Karagözu",
+          "passage_kind": "paraphrase",
+          "passage": "Karagöz navodi da Browne i drugi izvori pominju oko 30.000 osmanskih gubitaka.",
+          "passage_language": "sr-Latn",
+          "transcription": "unverified",
+          "role": "supports",
+          "via": {
+            "source_id": "karagoz-2014",
+            "locator": "Str. 95, fusnota 60"
+          }
+        }
+      ],
+      "status": "unknown",
+      "estimate": {
+        "value": "30000",
+        "unit": "vojnika",
+        "counted_population": "Osmanska vojska",
+        "counting_definition": "Procena koju Karagöz pripisuje Browneu",
+        "approximate": true
+      }
+    },
+    {
+      "claim_id": "battle-command-ottoman",
+      "text": "Osmanskom vojskom u bici kod Petrovaradina 1716. komandovao je Silahdar Damat Ali-paša.",
+      "topic": "Zapovednici bitke kod Petrovaradina 1716.",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "rct-catalog-727006",
+          "locator_kind": "section",
+          "locator": "RCIN 727006, opis karte, prvi pasus",
+          "passage_kind": "paraphrase",
+          "passage": "Institucionalni opis navodi da je osmanskom vojskom komandovao Silahdar Damat Ali-paša.",
+          "passage_language": "sr-Latn",
+          "transcription": "original_checked",
+          "role": "supports"
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "battle-outcome-rct",
+      "text": "U bici kod Petrovaradina 1716. pobedila je habzburška carska vojska.",
+      "topic": "Ishod bitke kod Petrovaradina 1716.",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "rct-catalog-727006",
+          "locator_kind": "section",
+          "locator": "RCIN 727006, opis karte, prvi pasus",
+          "passage_kind": "paraphrase",
+          "passage": "Institucionalni opis ishod označava kao pobedu carske vojske.",
+          "passage_language": "sr-Latn",
+          "transcription": "original_checked",
+          "role": "supports"
+        }
+      ],
+      "status": "unknown"
     }
   ],
   "dossiers": [
@@ -1093,7 +1219,11 @@
         "artillery-nusretname",
         "artillery-vienna",
         "battle-map-rct-layers",
-        "battle-losses-browne"
+        "battle-losses-browne",
+        "battle-losses-ottoman-karagoz",
+        "battle-losses-ottoman-browne",
+        "battle-command-ottoman",
+        "battle-outcome-rct"
       ]
     },
     {
