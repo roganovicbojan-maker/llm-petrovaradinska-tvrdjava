@@ -91,6 +91,28 @@
         list.append(item);
       }
       answerResult.append(list);
+      for (const comparison of data.estimate_comparisons || []) {
+        const heading = document.createElement("h3");
+        heading.textContent = "Različite procene u katalogu: " + comparison.topic;
+        const scope = document.createElement("p");
+        scope.textContent = "Izvori mogu brojati različite kategorije. Proveri obuhvat svake procene.";
+        const estimates = document.createElement("ul");
+        for (const item of comparison.estimates) {
+          const row = document.createElement("li");
+          const link = document.createElement("a");
+          link.href = "/reviews/" + encodeURIComponent(comparison.dossier_id) + "#" +
+            encodeURIComponent(item.observation_id);
+          link.textContent = item.source_title + " · " + item.citation.locator;
+          const e = item.estimate;
+          const quantity = e.low != null ? e.low + "–" + e.high : e.value;
+          const details = document.createElement("p");
+          details.textContent = (e.approximate ? "oko " : "") + quantity + " " + e.unit +
+            " · " + e.counted_population + " · " + e.counting_definition;
+          row.append(link, details);
+          estimates.append(row);
+        }
+        answerResult.append(heading, scope, estimates);
+      }
     } catch {
       answerStatus.textContent = "Došlo je do greške pri učitavanju odgovora.";
     } finally {

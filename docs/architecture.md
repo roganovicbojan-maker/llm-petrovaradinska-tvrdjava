@@ -24,11 +24,27 @@ makro Recall@5, MRR@5 i udeo negativnih upita bez rezultata. Skup je regresioni
 pilot nad postojećim dosijeima. Za ocenu istorijske relevantnosti na široj
 građi potreban je nezavisno označen stručni korpus.
 
+Opcioni režim za POST /api/v1/answers gradi vektorski indeks u memoriji
+pri pokretanju procesa, sa jednim vektorom po ID-ju navoda. Tekst navoda,
+odlomci i kontekst šalju se Ollami putem /api/embed. Pretraga poredi kosinusnu
+sličnost sa svim vektorima, odbacuje rezultate ispod praga i spaja dva ranga
+metodom Reciprocal Rank Fusion. Linkovi, statusi i uloge dokaza ostaju u
+katalogu. Prag FORTRESS_EMBEDDING_MIN_SIMILARITY je početna postavka (0,65)
+i treba ga oceniti za konkretan embedding model.
+
+Bez FORTRESS_EMBEDDING_MODEL koristi se leksički režim. Ako izgradnja indeksa
+ne uspe, zabeleži se greška i proces koristi leksičku pretragu do ponovnog
+pokretanja. Ako ne uspe upit prema modelu, taj zahtev koristi leksičku
+pretragu. GET /ready prikazuje spremnost indeksa kada je opcija uključena.
+Uspešni odgovori označavaju putanju u X-Fortress-Retrieval. Pregled dosijea
+i GET /api/v1/review-search i dalje koriste leksičku pretragu. Leksički
+regresioni testovi u CI-ju rade bez Ollame.
+
 Generator dobija pronađene navode sa ulogama dokaza. Svaki iskaz u odgovoru ima
 jedan izvor (source_id) i ID-jeve potkrepljujućih navoda (evidence_ids). Provera
 odbija reference van pretrage i brojeve (uključujući uobičajene srpske oblike
 rečima) kojih nema u citiranim dokazima tog izvora. Odvojeni poziv Ollami
-ocenjuje da li dokazi podržavaju ceo iskaz, pripisivanje i ograde. Ako provera
+ocenjuje da li dokazi podržavaju ceo iskaz, pripisivanje i ograde, kao i da li je iskaz relevantan za pitanje. Ako provera
 ne prođe, odgovor se odbija. API označava rezultat kao model_checked.
 Kada se koristi prilagođeni generator bez verifikatora, prihvataju se samo
 iskazi koji se poklapaju sa tekstom citiranog kataloga (catalog_excerpt).
@@ -59,5 +75,5 @@ za sve procese. Za privatni API dodaj autentifikaciju. Limiti u aplikaciji
 važe pojedinačno za svaki proces. Posle konfiguracije uradi probu opterećenja
 i podesi nadzor, alarme i pravila za blokiranje zloupotrebe.
 
-Plan za širu građu obuhvata OCR, hibridni indeks i nezavisnu stručnu evaluaciju.
+Plan za širu građu obuhvata OCR, indeksiranje odlomaka iz primarne građe i nezavisnu stručnu evaluaciju.
 Za prava nad kodom, metapodacima i građom vidi [pravila za podatke](../data/README.md).

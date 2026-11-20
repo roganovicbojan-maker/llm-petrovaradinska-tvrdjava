@@ -1,0 +1,48 @@
+[
+  {
+    "query": "Which account attributes the capture of around one hundred guns to Prince Eugene?",
+    "expected": [
+      "artillery-eugene"
+    ]
+  },
+  {
+    "query": "What different casualty estimates does the modern Turkish study mention for the defeated army?",
+    "expected": [
+      "battle-losses-ottoman-karagoz",
+      "battle-losses-ottoman-browne"
+    ]
+  },
+  {
+    "query": "Koje je godine počelo pretvaranje prostorija franjevaca u mesto za lečenje vojnika?",
+    "expected": [
+      "franjevci-bolnica-1783"
+    ]
+  },
+  {
+    "query": "Welche Bauarbeiten waren vorgesehen und welche waren bereits fertig gemeldet?",
+    "expected": [
+      "plan-reported-1753",
+      "plan-proposed-1754"
+    ]
+  },
+  {
+    "query": "Na kojoj granici lesnih naslaga su arheolozi zabeležili kamenje koje je čovek obrađivao?",
+    "expected": [
+      "paleolit-2014-stratigrafija"
+    ]
+  },
+  {
+    "query": "Quelles sont les dates indiquées sur le plan du siège de 1694 ?",
+    "expected": [
+      "opsada-1694-karta-raspon"
+    ]
+  },
+  {
+    "query": "Koliko je kaldrmisanih ulica u tvrđavi ostalo 2025?",
+    "expected": []
+  },
+  {
+    "query": "Where can the order signed by Galileo for the defense of Petrovaradin be found?",
+    "expected": []
+  }
+]

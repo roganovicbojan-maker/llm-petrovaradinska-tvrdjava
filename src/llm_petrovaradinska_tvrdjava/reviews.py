@@ -1,6 +1,7 @@
 import re
 import unicodedata
 from collections import Counter
+from collections.abc import Iterator
 from difflib import get_close_matches
 from math import log1p
 from typing import Annotated, Literal, Self
@@ -194,6 +195,21 @@ class ReviewMatch(Record):
     observation: Observation
     source: DossierSource
     intermediary: DossierSource | None = None
+
+
+def iter_review_matches(dossiers: list[Dossier]) -> Iterator[ReviewMatch]:
+    for dossier in dossiers:
+        sources = {source.source_id: source for source in dossier.sources}
+        for comparison in dossier.comparisons:
+            for row in comparison.observations:
+                yield ReviewMatch(
+                    dossier_id=dossier.dossier_id,
+                    dossier_title=dossier.title,
+                    topic=comparison.topic,
+                    observation=row,
+                    source=sources[row.citation.source_id],
+                    intermediary=sources[row.via.source_id] if row.via else None,
+                )
 
 
 TOKEN_PATTERN = re.compile(r"[^\W_]+")
@@ -414,55 +430,31 @@ def search_dossiers(dossiers: list[Dossier], query: str) -> list[ReviewMatch]:
     topical_terms = {term for term in terms - QUERY_CONTEXT if not term.isdecimal()}
     rows = []
     frequency: Counter[str] = Counter()
-    for dossier in dossiers:
-        sources = {source.source_id: source for source in dossier.sources}
-        dossier_terms = search_terms(dossier.title, places)
-        for comparison in dossier.comparisons:
-            topic_terms = search_terms(comparison.topic, places)
-            for row in comparison.observations:
-                source = sources[row.citation.source_id]
-                intermediary = sources[row.via.source_id] if row.via else None
-                value_terms = search_terms(row.value, places)
-                evidence_terms = search_terms(
-                    f"{row.context} {row.citation.locator} {source.title} {source.tradition}",
-                    places,
-                )
-                if source.kind == "map":
-                    evidence_terms.add("karta")
-                for evidence in row.evidence:
-                    evidence_terms |= search_terms(
-                        f"{evidence.passage} {evidence.locator} {evidence.source.title}", places
-                    )
-                document_terms = value_terms | topic_terms | evidence_terms | dossier_terms
-                frequency.update(document_terms)
-                rows.append(
-                    (
-                        dossier,
-                        comparison,
-                        row,
-                        source,
-                        intermediary,
-                        value_terms,
-                        topic_terms | evidence_terms,
-                        dossier_terms,
-                        document_terms,
-                    )
-                )
+    for match in iter_review_matches(dossiers):
+        row = match.observation
+        source = match.source
+        dossier_terms = search_terms(match.dossier_title, places)
+        topic_terms = search_terms(match.topic, places)
+        value_terms = search_terms(row.value, places)
+        evidence_terms = search_terms(
+            f"{row.context} {row.citation.locator} {source.title} {source.tradition}", places
+        )
+        if source.kind == "map":
+            evidence_terms.add("karta")
+        for evidence in row.evidence:
+            evidence_terms |= search_terms(
+                f"{evidence.passage} {evidence.locator} {evidence.source.title}", places
+            )
+        document_terms = value_terms | topic_terms | evidence_terms | dossier_terms
+        frequency.update(document_terms)
+        rows.append(
+            (match, value_terms, topic_terms | evidence_terms, dossier_terms, document_terms)
+        )
     if not rows:
         return []
     average_length = sum(len(row[-1]) for row in rows) / len(rows)
     matches = []
-    for (
-        dossier,
-        comparison,
-        row,
-        source,
-        intermediary,
-        values,
-        context_terms,
-        title,
-        document,
-    ) in rows:
+    for match, values, context_terms, title, document in rows:
         covered_topics = topical_terms & document
         if topical_terms and len(covered_topics) <= len(topical_terms) // 2:
             continue
@@ -473,13 +465,5 @@ def search_dossiers(dossiers: list[Dossier], query: str) -> list[ReviewMatch]:
             idf = log1p((len(rows) - frequency[term] + 0.5) / (frequency[term] + 0.5))
             score += idf * tf * 2.2 / (tf + normalization)
         if score:
-            match = ReviewMatch(
-                dossier_id=dossier.dossier_id,
-                dossier_title=dossier.title,
-                topic=comparison.topic,
-                observation=row,
-                source=source,
-                intermediary=intermediary,
-            )
             matches.append((score, match))
     return [match for _, match in sorted(matches, key=lambda item: -item[0])[:10]]

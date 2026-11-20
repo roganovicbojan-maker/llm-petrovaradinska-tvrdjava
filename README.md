@@ -113,6 +113,40 @@ Predložena demo pitanja
 - Kada je vojna bolnica smeštena u samostan?
 - Koliko je bilo stanovnika u Vinči 2024?
 
+### Priprema PDF izvora
+
+Ekstrakcija po stranama, označavanje strana za OCR i izrada lokalnog nacrta
+opisani su u [postupku uredničkog pregleda PDF izvora](docs/pdf-ingestion.md).
+
+### Opciona hibridna pretraga
+
+Odgovori po podrazumevanom podešavanju koriste leksičku pretragu. Za lokalni
+eksperiment sa višejezičnim vektorima instaliraj model u Ollami i u Git Bash-u
+postavi promenljive:
+
+```bash
+ollama pull bge-m3
+export FORTRESS_EMBEDDING_MODEL=bge-m3
+export FORTRESS_EMBEDDING_TIMEOUT=30
+./.venv/Scripts/python.exe tools/evaluate_retrieval.py --hybrid
+./.venv/Scripts/python.exe tools/evaluate_retrieval.py --hybrid --challenge
+```
+
+Poređenje koristi isti katalog za leksičku, vektorsku i hibridnu pretragu.
+Teži skup ima parafraze na više jezika i pitanja bez odgovora. Oznake su
+pripremljene prema postojećem katalogu. Poređenje treba da pokaže da li hibrid
+pronalazi relevantne navode bez dodatnih pogodaka na pitanja bez dokaza.
+
+Za poređenje odgovora pokreni isti model i isti verifikator, jednom po režimu:
+
+```bash
+./.venv/Scripts/python.exe tools/evaluate_generation.py --models qwen3:4b --retrieval lexical --challenge
+./.venv/Scripts/python.exe tools/evaluate_generation.py --models qwen3:4b --retrieval hybrid --challenge
+```
+
+Poređenje odgovora beleži statuse, očekivane ID-jeve citata i trajanje. Ocena
+istorijske tačnosti celog odgovora zahteva pregled iskaza i izvora.
+
 ### Urednička provera
 
 Provera se beleži uz pojedinačni navod. `verified` znači da je urednik proverio
