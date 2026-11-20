@@ -7,7 +7,11 @@ permissions:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -17,5 +21,6 @@ jobs:
       - run: python -m pip install -e ".[dev]"
       - run: python -m ruff check .
       - run: python -m ruff format --check .
-      - run: python -m pytest
+      - run: python -m mypy src
+      - run: python -m pytest --cov=llm_petrovaradinska_tvrdjava --cov-report=term-missing
       - run: python tools/validate_catalog.py

@@ -1,0 +1,1099 @@
+{
+  "schema_version": 2,
+  "sources": [
+    {
+      "source_id": "mihailovic-mihailovic-2023-palaeolithic-technocomplexes",
+      "bibliography": "Mihailović, Dušan D. i Bojana R. Mihailović. 2023. „Chronology and Succession of Palaeolithic Technocomplexes in Serbia“. Zbornik Narodnog muzeja Srbije. Arheologija 26 (1), 11–37. DOI 10.18485/znms_arh.2023.26.1.1.",
+      "title": "Chronology and Succession of Palaeolithic Technocomplexes in Serbia",
+      "author_or_institution": "Dušan D. Mihailović i Bojana R. Mihailović",
+      "publication_year": 2023,
+      "source_type": "research",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "en",
+      "script": "Latn",
+      "country": "Srbija",
+      "url": "https://www.narodnimuzej.rs/wp-content/uploads/2023/12/ZbornikNarodnogMuzeja261ARHEOLOGIJA2023.pdf",
+      "doi": "10.18485/znms_arh.2023.26.1.1",
+      "accessed_on": "2026-11-19",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "places": [
+        {
+          "original_name": "Петроварадинска тврђава",
+          "modern_name": "Petrovaradinska tvrđava, Novi Sad",
+          "aliases": [
+            "Petrovaradinska tvrđava",
+            "Петроварадинска тврђава"
+          ]
+        }
+      ],
+      "historical_period": "Srednji paleolit",
+      "ocr_status": "not_applicable",
+      "reliability_notes": "Rad donosi pregled hronologije. Za OSL starost sloja 2b upućuje na Marković i dr. (2021), DOI 10.1017/qua.2020.88. Stranica 35 pripada objavljenom sažetku na srpskom; klasifikacija izvora odnosi se na korišćenu tvrdnju o datovanju.",
+      "derived_from": [
+        "markovic-et-al-2021-petrovaradin-geomorphology"
+      ]
+    },
+    {
+      "source_id": "markovic-et-al-2021-petrovaradin-geomorphology",
+      "bibliography": "Marković, S. B., et al. 2021. Geomorphological evolution of the Petrovaradin Fortress Palaeolithic site (Novi Sad, Serbia). Quaternary Research, 103, 21–34. doi:10.1017/qua.2020.88.",
+      "title": "Geomorphological evolution of the Petrovaradin Fortress Palaeolithic site (Novi Sad, Serbia)",
+      "author_or_institution": "Slobodan B. Marković, Jef Vandenberghe, Thomas Stevens, Dušan Mihailović, Milivoj B. Gavrilov, Milica G. Radaković, Christian Zeeden, Igor Obreht, Zoran M. Perić, Janina J. Nett, Frank Lehmkuhl",
+      "publication_year": 2021,
+      "edition_or_translation": "Objavljeno onlajn 2020, u svesci 2021.",
+      "source_type": "research",
+      "source_class": "primary",
+      "use": "evidence",
+      "language": "en",
+      "script": "Latn",
+      "country": "Srbija",
+      "doi": "10.1017/qua.2020.88",
+      "url": "https://www.cambridge.org/core/services/aop-cambridge-core/content/view/587C10043C6BB2474866C7802BDA90A0/S0033589420000885a.pdf/geomorphological_evolution_of_the_petrovaradin_fortress_palaeolithic_site_novi_sad_serbia.pdf",
+      "accessed_on": "2026-11-20",
+      "availability": "online",
+      "copyright_status": "open_license",
+      "ocr_status": "not_applicable",
+      "author_position_and_interest": "Autori istraživanja geomorfologije i stratigrafije lokaliteta.",
+      "proximity_to_event": "Savremeno neposredno istraživanje sedimenata, uz stratigrafsku korelaciju sa ranije iskopanim sektorom.",
+      "reliability_notes": "CC BY 4.0. OSL uzorci potiču iz obližnje sonde. Autori razmatraju mogućnost redepozicije nalaza iz sloja 2b."
+    },
+    {
+      "source_id": "jokic-2011",
+      "bibliography": "Siniša Jokić, Bitka kod Petrovaradina 1716. godine na planovima iz fondova bečkih arhiva",
+      "title": "Siniša Jokić, Bitka kod Petrovaradina 1716. godine na planovima iz fondova bečkih arhiva",
+      "author_or_institution": "Siniša Jokić",
+      "source_type": "research",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "sr",
+      "script": "Zzzz",
+      "tradition": "Srpska muzejska literatura",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://museumns.rs/wp-content/uploads/2019/01/katalog_bitka_1716.pdf"
+    },
+    {
+      "source_id": "karagoz-2014",
+      "bibliography": "Hakan Karagöz, Petervaradin Muharebesinde (1716) Habsburgların Osmanlılardan Ele Geçirdiği Silahlar ve Harp Teçhizatı",
+      "title": "Hakan Karagöz, Petervaradin Muharebesinde (1716) Habsburgların Osmanlılardan Ele Geçirdiği Silahlar ve Harp Teçhizatı",
+      "author_or_institution": "Hakan Karagöz",
+      "source_type": "research",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "tr",
+      "script": "Zzzz",
+      "tradition": "Turska istoriografija",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://dergipark.org.tr/tr/download/article-file/102250"
+    },
+    {
+      "source_id": "banlaky-xix-3",
+      "bibliography": "József Bánlaky, A magyar nemzet hadtörténelme, prilog XIX/3",
+      "title": "József Bánlaky, A magyar nemzet hadtörténelme, prilog XIX/3",
+      "author_or_institution": "József Bánlaky",
+      "source_type": "map",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "hu",
+      "script": "Zzzz",
+      "tradition": "Mađarska vojna istoriografija",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://mek.oszk.hu/09400/09477/html/images/banlaky-big_hadtortpic_1903.jpg"
+    },
+    {
+      "source_id": "szeged-2019",
+      "bibliography": "A Bánság visszafoglalása, avagy III. Károly első háborúja a törökök ellen, Aracs 19/3",
+      "title": "A Bánság visszafoglalása, avagy III. Károly első háborúja a törökök ellen, Aracs 19/3",
+      "author_or_institution": "A Bánság visszafoglalása",
+      "source_type": "research",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "hu",
+      "script": "Zzzz",
+      "tradition": "Mađarska istoriografija",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://publicatio.bibl.u-szeged.hu/24903/1/30773525_publikacio.pdf"
+    },
+    {
+      "source_id": "eugene-report-56",
+      "bibliography": "Eugen Savojski, izveštaj Ratnom savetu, izdanje Ratni izveštaji (2012)",
+      "title": "Eugen Savojski, izveštaj Ratnom savetu, izdanje Ratni izveštaji (2012)",
+      "author_or_institution": "Eugen Savojski",
+      "source_type": "archival_document",
+      "source_class": "primary",
+      "use": "evidence",
+      "language": "sr",
+      "script": "Zzzz",
+      "tradition": "Habzburška vojna prepiska",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://museumns.rs/wp-content/uploads/2019/01/eugen_savojski_web_2012.pdf#page=53",
+      "author_position_and_interest": "Habzburška vojna prepiska",
+      "proximity_to_event": "Primary account identified by the dossier; consult the cited edition or locator."
+    },
+    {
+      "source_id": "nusretname",
+      "bibliography": "Silâhdar Fındıklılı Mehmed Ağa, Nusretnâme, izdanje Mehmeta Topala (TÜBA, 2018)",
+      "title": "Silâhdar Fındıklılı Mehmed Ağa, Nusretnâme, izdanje Mehmeta Topala (TÜBA, 2018)",
+      "author_or_institution": "Silâhdar Fındıklılı Mehmed Ağa",
+      "source_type": "archival_document",
+      "source_class": "primary",
+      "use": "evidence",
+      "language": "ota",
+      "script": "Arab",
+      "tradition": "Osmanska hronika",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://www.tuba.gov.tr/tr/yayinlar/suresiz-yayinlar/turk-islam-bilim-kultur-mirasi-dizisi/nusretnme-1",
+      "author_position_and_interest": "Osmanska hronika",
+      "proximity_to_event": "Primary account identified by the dossier; consult the cited edition or locator."
+    },
+    {
+      "source_id": "vienna-inventory-viii-56a",
+      "bibliography": "Kriegsarchiv, Alte Feldakten 341, Türkenkrieg 1716, VIII–56a",
+      "title": "Kriegsarchiv, Alte Feldakten 341, Türkenkrieg 1716, VIII–56a",
+      "author_or_institution": "Kriegsarchiv",
+      "source_type": "archival_document",
+      "source_class": "primary",
+      "use": "evidence",
+      "language": "und",
+      "script": "Zzzz",
+      "tradition": "Habzburški vojni inventar",
+      "availability": "unknown",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "archival_reference": "VIII–56a",
+      "author_position_and_interest": "Habzburški vojni inventar",
+      "proximity_to_event": "Primary account identified by the dossier; consult the cited edition or locator."
+    },
+    {
+      "source_id": "rct-rcin-727006",
+      "bibliography": "Elizabeth Verseyl, plan Peterwardeina, Beograda i Temišvara, Royal Collection Trust, RCIN 727006",
+      "title": "Elizabeth Verseyl, plan Peterwardeina, Beograda i Temišvara, Royal Collection Trust, RCIN 727006",
+      "author_or_institution": "Elizabeth Verseyl",
+      "source_type": "map",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "und",
+      "script": "Zzzz",
+      "tradition": "Evropska štampana kartografija",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://militarymaps.rct.uk/ottoman-habsburg-wars-1521-1791/map-of-belgrade-peterwardein-and-temeswar-1716-belgrade-central-serbia-serbia-44deg4814n-20deg2754e"
+    },
+    {
+      "source_id": "browne-campaign-1716-1718",
+      "bibliography": "General Browne, Feldzug 1716–1718, Kriegsarchiv, MS-Kg. 17",
+      "title": "General Browne, Feldzug 1716–1718, Kriegsarchiv, MS-Kg. 17",
+      "author_or_institution": "General Browne",
+      "source_type": "archival_document",
+      "source_class": "primary",
+      "use": "evidence",
+      "language": "de",
+      "script": "Zzzz",
+      "tradition": "Habzburški vojni rukopis",
+      "availability": "unknown",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "archival_reference": "Feldzug 1716–1718, str. 27",
+      "author_position_and_interest": "Habzburški vojni rukopis",
+      "proximity_to_event": "Primary account identified by the dossier; consult the cited edition or locator."
+    },
+    {
+      "source_id": "kriegsarchiv-plan-15",
+      "bibliography": "Raportni i projektni plan Petrovaradinske tvrđave 1753–1754.",
+      "title": "Raportni i projektni plan Petrovaradinske tvrđave 1753–1754.",
+      "author_or_institution": "Unspecified in dossier",
+      "source_type": "map",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "und",
+      "script": "Zzzz",
+      "tradition": "Habzburška vojna kartografija",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://www.archivinformationssystem.at/detail.aspx?ID=2018495"
+    },
+    {
+      "source_id": "sajdl-2023",
+      "bibliography": "Aleksandar Sajdl, Heraldičke predstave na zdanjima Petrovaradinske tvrđave, Zbornik Matice srpske za istoriju 108 (2023)",
+      "title": "Aleksandar Sajdl, Heraldičke predstave na zdanjima Petrovaradinske tvrđave, Zbornik Matice srpske za istoriju 108 (2023)",
+      "author_or_institution": "Aleksandar Sajdl",
+      "source_type": "research",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "sr",
+      "script": "Zzzz",
+      "tradition": "Istorija arhitekture",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://doi.org/10.18485/ms_zmsi.2023.108.2"
+    },
+    {
+      "source_id": "bms-pg-iii-16",
+      "bibliography": "Raportni plan građevinskih radova na Petrovaradinskoj tvrđavi 1764–1766.",
+      "title": "Raportni plan građevinskih radova na Petrovaradinskoj tvrđavi 1764–1766.",
+      "author_or_institution": "Unspecified in dossier",
+      "source_type": "map",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "und",
+      "script": "Zzzz",
+      "tradition": "Habzburška vojna kartografija",
+      "availability": "unknown",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "archival_reference": "Biblioteka Matice srpske, Pg III 16, legenda Donje tvrđave, oznaka XII"
+    },
+    {
+      "source_id": "oruc-2021",
+      "bibliography": "Hatice Oruç, Târîh-i Varadin Der Zemân-ı Sultân Ahmed Bin İbrahim, Belgeler 36(40), 51–190 (2021)",
+      "title": "Hatice Oruç, Târîh-i Varadin Der Zemân-ı Sultân Ahmed Bin İbrahim, Belgeler 36(40), 51–190 (2021)",
+      "author_or_institution": "Hatice Oruç",
+      "source_type": "research",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "tr",
+      "script": "Zzzz",
+      "tradition": "Tursko kritičko izdanje osmanske hronike",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://doi.org/10.37879/belgeler.2021.51"
+    },
+    {
+      "source_id": "rct-rcin-724066",
+      "bibliography": "I. G. Hanspersky de Fanal, plan Peterwardeina (1694), Royal Collection Trust, RCIN 724066",
+      "title": "I. G. Hanspersky de Fanal, plan Peterwardeina (1694), Royal Collection Trust, RCIN 724066",
+      "author_or_institution": "I. G. Hanspersky de Fanal",
+      "source_type": "map",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "und",
+      "script": "Zzzz",
+      "tradition": "Habzburška vojna kartografija",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://militarymaps.rct.uk/other-17th-century-conflicts/map-of-peterwardein-1694-petrovaradin-serbia-45deg1448n-19deg5246e"
+    },
+    {
+      "source_id": "thokoly-dnevnik-1694",
+      "bibliography": "Imre Thököly, dnevnik pohoda 1694.",
+      "title": "Imre Thököly, dnevnik pohoda 1694.",
+      "author_or_institution": "Imre Thököly",
+      "source_type": "archival_document",
+      "source_class": "primary",
+      "use": "evidence",
+      "language": "und",
+      "script": "Zzzz",
+      "tradition": "Mađarski učesnik u pohodu na osmanskoj strani",
+      "availability": "unknown",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "archival_reference": "Dnevnički unos za 30. septembar 1694.",
+      "author_position_and_interest": "Mađarski učesnik u pohodu na osmanskoj strani",
+      "proximity_to_event": "Primary account identified by the dossier; consult the cited edition or locator."
+    },
+    {
+      "source_id": "sevket-capraz-2010",
+      "bibliography": "Hüseyin Şevket i Çağatay Çapraz, İmre Thököly Gözüyle Osmanlı İmparatorluğu’nun 1694 Petrovaradin Kuşatması, Gazi Akademik Bakış 3(6) (2010)",
+      "title": "Hüseyin Şevket i Çağatay Çapraz, İmre Thököly Gözüyle Osmanlı İmparatorluğu’nun 1694 Petrovaradin Kuşatması, Gazi Akademik Bakış 3(6) (2010)",
+      "author_or_institution": "Hüseyin Şevket i Çağatay Çapraz",
+      "source_type": "research",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "tr",
+      "script": "Zzzz",
+      "tradition": "Turski prevod i studija mađarskog dnevnika",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://dergipark.org.tr/tr/download/article-file/73979"
+    },
+    {
+      "source_id": "mihailovic-2014",
+      "bibliography": "Dušan Mihailović, Paleolit na centralnom Balkanu: kulturne promene i populaciona kretanja (2014)",
+      "title": "Dušan Mihailović, Paleolit na centralnom Balkanu: kulturne promene i populaciona kretanja (2014)",
+      "author_or_institution": "Dušan Mihailović",
+      "source_type": "research",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "sr",
+      "script": "Zzzz",
+      "tradition": "Arheološka monografija",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://arheologija.rs/wp-content/uploads/2017/12/Dusan-Mihailovic-Paleolit-na-centralnom-Balkanu.pdf"
+    },
+    {
+      "source_id": "mihailovic-et-al-2025",
+      "bibliography": "Mihailović i sar., Middle and Upper Paleolithic of the southern Pannonian Basin, Quaternary International 746, 109950 (2025)",
+      "title": "Mihailović i sar., Middle and Upper Paleolithic of the southern Pannonian Basin, Quaternary International 746, 109950 (2025)",
+      "author_or_institution": "Mihailović i sar.",
+      "source_type": "archival_document",
+      "source_class": "primary",
+      "use": "evidence",
+      "language": "en",
+      "script": "Zzzz",
+      "tradition": "Arheologija i datovanje sedimenata",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://experts.arizona.edu/en/publications/middle-and-upper-paleolithic-of-the-southern-pannonian-basin-lith/",
+      "author_position_and_interest": "Arheologija i datovanje sedimenata",
+      "proximity_to_event": "Primary account identified by the dossier; consult the cited edition or locator."
+    },
+    {
+      "source_id": "matos-1987",
+      "bibliography": "Jerko Matoš, Samostan sv. Franje u Petrovarađinu, Peristil 30 (1987)",
+      "title": "Jerko Matoš, Samostan sv. Franje u Petrovarađinu, Peristil 30 (1987)",
+      "author_or_institution": "Jerko Matoš",
+      "source_type": "research",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "hr",
+      "script": "Zzzz",
+      "tradition": "Istorija arhitekture i arhivska istraživanja",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://hrcak.srce.hr/file/243996"
+    },
+    {
+      "source_id": "menguzzi-1769",
+      "bibliography": "F. Mengucci de Rossi, prikaz Petrovaradinske tvrđave sa juga, 1769.",
+      "title": "F. Mengucci de Rossi, prikaz Petrovaradinske tvrđave sa juga, 1769.",
+      "author_or_institution": "F. Mengucci de Rossi",
+      "source_type": "map",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "und",
+      "script": "Zzzz",
+      "tradition": "Istorijska kartografija, Nacionalna biblioteka u Beču",
+      "availability": "unknown",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "archival_reference": "Prikaz tvrđave sa južne strane, 1769."
+    },
+    {
+      "source_id": "skoric-2011",
+      "bibliography": "Dušan Škorić, Blažena Djevica Marija i marijanska pobožnost u baroknom slikarstvu, Godišnjak za znanstvena istraživanja 3 (2011)",
+      "title": "Dušan Škorić, Blažena Djevica Marija i marijanska pobožnost u baroknom slikarstvu, Godišnjak za znanstvena istraživanja 3 (2011)",
+      "author_or_institution": "Dušan Škorić",
+      "source_type": "research",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "hr",
+      "script": "Zzzz",
+      "tradition": "Istorija umetnosti",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://www.zkvh.org.rs/storage/app/uploads/public/61a/0dd/37e/61a0dd37ec1d3792256898.pdf"
+    },
+    {
+      "source_id": "takacs-1989",
+      "bibliography": "Miklós Takács, A bélakúti/péterváradi ciszterci monostor, Forum, Novi Sad (1989)",
+      "title": "Miklós Takács, A bélakúti/péterváradi ciszterci monostor, Forum, Novi Sad (1989)",
+      "author_or_institution": "Miklós Takács",
+      "source_type": "research",
+      "source_class": "secondary",
+      "use": "evidence",
+      "language": "hu",
+      "script": "Zzzz",
+      "tradition": "Mađarska srednjovekovna arheologija",
+      "availability": "online",
+      "copyright_status": "unknown",
+      "ocr_status": "unknown",
+      "url": "https://www.vamadia.rs/sites/default/files/2020-02/a%20belakuti-petervaradi%20ciszterci%20monostor.pdf"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "petrovaradin-middle-palaeolithic-layer-2b",
+      "text": "U sloju 2b Petrovaradinske tvrđave, čija je starost OSL metodom procenjena na oko 90.000 godina, pronađeni su srednjopaleolitski artefakti.",
+      "topic": "Arheologija / srednji paleolit",
+      "location": {
+        "original_name": "Петроварадинска тврђава",
+        "modern_name": "Petrovaradinska tvrđava, Novi Sad",
+        "aliases": [
+          "Petrovaradinska tvrđava",
+          "Петроварадинска тврђава"
+        ]
+      },
+      "evidence": [
+        {
+          "source_id": "mihailovic-mihailovic-2023-palaeolithic-technocomplexes",
+          "locator_kind": "page",
+          "locator": "35, Rezime na srpskom",
+          "passage_kind": "paraphrase",
+          "passage": "Autori navode nalaze artefakata u sloju 2b i navode OSL procenu starosti tog sloja od oko 90.000 godina.",
+          "passage_language": "sr-Latn",
+          "transcription": "original_checked",
+          "role": "supports"
+        },
+        {
+          "role": "context",
+          "source_id": "markovic-et-al-2021-petrovaradin-geomorphology",
+          "locator_kind": "section",
+          "locator": "Figure 3; Palaeolithic occupation",
+          "passage_kind": "paraphrase",
+          "passage": "Autori stratigrafski povezuju jedinicu V obližnje sonde sa slojem 2b i upozoravaju da je deo artefakata možda redeponovan. Datovanje se odnosi na sediment.",
+          "passage_language": "sr-Latn",
+          "transcription": "original_checked"
+        }
+      ],
+      "status": "unknown",
+      "confidence": "unassessed",
+      "dating": {
+        "method": "OSL",
+        "value": "90",
+        "unit": "ka",
+        "original_expression": "пре 90 хиљада година",
+        "approximate": true
+      }
+    },
+    {
+      "claim_id": "date-place-serbian",
+      "text": "5. avgust 1716. · Petrovaradin",
+      "topic": "Datum i mesto bitke",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "jokic-2011",
+          "locator": "Karta br. 3, H III d 905",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Datum i mesto navedeni su u naslovu kataloške jedinice za plan bitke.",
+          "transcription": "unverified"
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "date-place-turkish",
+      "text": "5. avgust 1716. · Petrovaradin",
+      "topic": "Datum i mesto bitke",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "karagoz-2014",
+          "locator": "Str. 88, odeljak 2",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Rad razmatra glavnu bitku kod Petervaradina i njen neposredni ishod.",
+          "transcription": "unverified"
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "date-place-hungarian",
+      "text": "5. avgust 1716. · Petrovaradin",
+      "topic": "Datum i mesto bitke",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "banlaky-xix-3",
+          "locator": "Prilog XIX/3, naslov karte",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Mađarski naziv u naslovu je Pétervárad.",
+          "transcription": "unverified",
+          "via": {
+            "source_id": "szeged-2019",
+            "locator": "Str. 85, reprodukcija karte"
+          }
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "artillery-eugene",
+      "text": "Oko 100 zaplenjenih topova",
+      "topic": "Zaplenjena i ostavljena artiljerija",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "eugene-report-56",
+          "locator": "Dokument 56, str. 53",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Eugen izveštava 5. avgusta uz napomenu da je broj privremen. Koristimo objavljeni srpski prevod izveštaja.",
+          "transcription": "unverified"
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "artillery-nusretname",
+      "text": "160 ostavljenih topova",
+      "topic": "Zaplenjena i ostavljena artiljerija",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "nusretname",
+          "locator": "Fol. 315b",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Navod o oruđima ostavljenim na bojištu prenosi Karagöz. Kategorije oruđa treba proveriti u hronici.",
+          "transcription": "unverified",
+          "via": {
+            "source_id": "karagoz-2014",
+            "locator": "Str. 88, fusnota 40"
+          }
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "artillery-vienna",
+      "text": "175 zaplenjenih artiljerijskih oruđa",
+      "topic": "Zaplenjena i ostavljena artiljerija",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "vienna-inventory-viii-56a",
+          "locator": "VIII–56a",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Karagöz navodi da zbir obuhvata 3 haubice i 23 mužara.",
+          "transcription": "unverified",
+          "via": {
+            "source_id": "karagoz-2014",
+            "locator": "Str. 88, fusnota 40, i prilog 2"
+          }
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "battle-map-rct-layers",
+      "text": "Royal Collection Trust datuje kartu kao 1716. ili kasnije.",
+      "topic": "Kartografsko izdanje i kasnije izmene",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "rct-rcin-727006",
+          "locator": "RCIN 727006, kataloški opis i datovanje",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Katalog opisuje nalepljen kartografski dodatak koji prikazuje opsadu Beograda. Datum prikazane bitke i datovanje predmeta čitaju se zasebno.",
+          "transcription": "unverified"
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "battle-losses-browne",
+      "text": "Browneu se pripisuje procena od 6.000–7.000 poginulih i ranjenih habzburških vojnika.",
+      "topic": "Procene gubitaka",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "browne-campaign-1716-1718",
+          "locator": "Feldzug 1716–1718, str. 27",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Broj uključuje poginule i ranjene. Pristup ovom navodu je preko Karagözove fusnote.",
+          "transcription": "unverified",
+          "via": {
+            "source_id": "karagoz-2014",
+            "locator": "Fusnota 59"
+          }
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "plan-reported-1753",
+      "text": "1753. · Radovi prijavljeni kao izvedeni",
+      "topic": "Izvedeno stanje i predlog radova",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "kriegsarchiv-plan-15",
+          "locator": "Kriegsarchiv Wien, Inland C VII Peterwardein α, br. 15, naslov plana",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Sajdl prenosi naslov izvornog plana. Godina 1753. odnosi se na raport o izvedenim radovima.",
+          "transcription": "unverified",
+          "via": {
+            "source_id": "sajdl-2023",
+            "locator": "Str. 22, fusnota 17, i str. 26, fusnota 39"
+          }
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "plan-proposed-1754",
+      "text": "1754. · Predloženi radovi",
+      "topic": "Izvedeno stanje i predlog radova",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "kriegsarchiv-plan-15",
+          "locator": "Kriegsarchiv Wien, Inland C VII Peterwardein α, br. 15, naslov plana",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Godina 1754. u naslovu se odnosi na predlog. Za potvrdu pojedinačnih zahvata potreban je kasniji raport ili drugi dokument o izvođenju.",
+          "transcription": "unverified",
+          "via": {
+            "source_id": "sajdl-2023",
+            "locator": "Str. 22, fusnota 17, i str. 26, fusnota 39"
+          }
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "belgrade-gate-start",
+      "text": "Zidanje Beogradske kapije započeto je 1753.",
+      "topic": "Datovanje Beogradske kapije",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "kriegsarchiv-plan-15",
+          "locator": "Plan 1753/1754, legenda Donje tvrđave, oznaka XL",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Sajdl prenosi da legenda označava kapiju kao započetu. Boja odgovara zidanju evidentiranom 1753, pa autor dopušta mogućnost da je kapija tada i dovršena.",
+          "transcription": "unverified",
+          "via": {
+            "source_id": "sajdl-2023",
+            "locator": "Str. 29, fusnota 56"
+          }
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "belgrade-gate-later-plan",
+      "text": "Na planu 1764–1766. kapija je evidentirana kao postojeća",
+      "topic": "Datovanje Beogradske kapije",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "bms-pg-iii-16",
+          "locator": "Biblioteka Matice srpske, Pg III 16, legenda Donje tvrđave, oznaka XII",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Sajdl navodi da je plan svrstava među starije građevine zatečene u dobrom stanju. Tačna godina završetka ostaje otvorena.",
+          "transcription": "unverified",
+          "via": {
+            "source_id": "sajdl-2023",
+            "locator": "Str. 29, fusnota 57"
+          }
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "opsada-1694-oruc-trajanje",
+      "text": "Oruç navodi da je opsada trajala 23 dana.",
+      "topic": "Vremenski obuhvat i perspektive opsade 1694.",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "oruc-2021",
+          "locator": "Sažetak izdanja, uvodni pasus",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Izdanje se zasniva na anonimnoj osmanskoj hronici. Broj je ovde preuzet iz sažetka priređivača.",
+          "transcription": "unverified"
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "opsada-1694-karta-raspon",
+      "text": "U naslovu plana stoji raspon 9–22. septembar 1694.",
+      "topic": "Vremenski obuhvat i perspektive opsade 1694.",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "rct-rcin-724066",
+          "locator": "RCIN 724066, transkripcija rukopisnog naslova",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Datumi određuju šta naslov karte predstavlja. Sami po sebi nisu mera ukupnog trajanja opsade.",
+          "transcription": "unverified"
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "opsada-1694-thokoly-septembar",
+      "text": "Thököly beleži da je od glasnika dobio vesti o borbama.",
+      "topic": "Vremenski obuhvat i perspektive opsade 1694.",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "thokoly-dnevnik-1694",
+          "locator": "Dnevnički unos za 30. septembar 1694.",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Učesnik ovde prenosi primljenu vest. Datum se odnosi na unos u dnevnik.",
+          "transcription": "unverified",
+          "via": {
+            "source_id": "sevket-capraz-2010",
+            "locator": "Unos Perşembe 30, septembar, str. 167"
+          }
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "paleolit-2014-stratigrafija",
+      "text": "Artefakti su zabeleženi kod granice lesnih slojeva 2a i 2b.",
+      "topic": "Nalazi i datovanje paleolitskih slojeva",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "mihailovic-2014",
+          "locator": "Str. 40, odeljak Petrovaradinska tvrđava",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Autor razmatra mogućnost da su neki nalazi povezani sa nivoom koji je uklonila erozija. Ova interpretacija potiče iz ranije faze istraživanja.",
+          "transcription": "unverified"
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "paleolit-2b-90ka",
+      "text": "Oko 90.000 godina, sloj 2b sa srednjopaleolitskim kamenim alatkama.",
+      "topic": "Nalazi i datovanje paleolitskih slojeva",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "mihailovic-et-al-2025",
+          "locator": "Sažetak, sloj 2b",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Rad koristi optički stimulisanu luminescenciju (OSL) za datovanje lesnih slojeva. Starost se odnosi na sloj i kontekst nalaza.",
+          "transcription": "unverified"
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "paleolit-2a-43ka",
+      "text": "Oko 43.000–40.000 godina, sloj 2a sa levaloaškim i kina elementima.",
+      "topic": "Nalazi i datovanje paleolitskih slojeva",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "mihailovic-et-al-2025",
+          "locator": "Sažetak, sloj 2a",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Ovo je zaseban sklop nalaza iz mlađeg sloja.",
+          "transcription": "unverified"
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "paleolit-1-gravetijen",
+      "text": "Oko 31.000–26.000 godina prema OSL i oko 28.000 kalibrisanih godina BP prema radiokarbonskom datovanju gravetijenskog sloja.",
+      "topic": "Nalazi i datovanje paleolitskih slojeva",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "mihailovic-et-al-2025",
+          "locator": "Sažetak, sloj 1, jugoistočni sektor",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Procene su navedene uz metodu. Više arheoloških horizonata pokazuje prisustvo u različitim periodima i ne uspostavlja neprekidan niz naseljavanja.",
+          "transcription": "unverified"
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "franjevci-faze-gradnje",
+      "text": "Barokni samostanski sklop građen je u fazama od 1699. do 1772.",
+      "topic": "Izgradnja i prikaz Donjeg grada",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "matos-1987",
+          "locator": "Str. 109, sažetak",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Raspon se odnosi na sklop, pa se iz njega ne izvodi precizni datum svake zgrade.",
+          "transcription": "unverified"
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "franjevci-pogled-1769",
+      "text": "Izgled tvrđave prikazan je iz južnog pravca 1769.",
+      "topic": "Izgradnja i prikaz Donjeg grada",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "menguzzi-1769",
+          "locator": "Prikaz tvrđave sa južne strane, 1769.",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Južni pogled dokumentuje odabrani prikaz lokaliteta. Za datovanje pojedinačnih delova potreban je dodatni izvor.",
+          "transcription": "unverified",
+          "via": {
+            "source_id": "matos-1987",
+            "locator": "Str. 110, sl. 1"
+          }
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "franjevci-bolnica-1783",
+      "text": "Smeštanje vojne bolnice u samostan počelo je 1783.",
+      "topic": "Prenamena samostana i crkve",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "matos-1987",
+          "locator": "Str. 111, uvodni pasus",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Matoš razlikuje početak smeštanja bolnice od kasnijeg iseljenja fratara.",
+          "transcription": "unverified"
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "franjevci-ukidanje-1786",
+      "text": "Josip II ukinuo je samostan 1786.",
+      "topic": "Prenamena samostana i crkve",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "matos-1987",
+          "locator": "Str. 109, sažetak",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Godina se odnosi na ukidanje samostana.",
+          "transcription": "unverified"
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "franjevci-crkva-1808",
+      "text": "Crkva je 1808. izgubila sakralnu funkciju i prenamenjena je za Slavonsku generalnu komandu.",
+      "topic": "Prenamena samostana i crkve",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "matos-1987",
+          "locator": "Str. 109, sažetak",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Namena crkve se razmatra zasebno od ranijeg smeštanja bolnice u samostan.",
+          "transcription": "unverified"
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "franjevci-marija-pomocnica",
+      "text": "Škorić navodi da su petrovaradinski franjevci darovali sliku Marije Pomoćnice novosadskoj župi.",
+      "topic": "Sakralna baština i poreklo navoda",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "matos-1987",
+          "locator": "Str. 111, prema Škorićevoj referenci",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Škorić za istorijat slike navodi Matoša. Ova veza evidentira prenošenje istog navoda.",
+          "transcription": "unverified",
+          "via": {
+            "source_id": "skoric-2011",
+            "locator": "Str. 220, odeljak Marija Pomoćnica"
+          }
+        }
+      ],
+      "status": "unknown"
+    },
+    {
+      "claim_id": "belakut-medieval-monastery",
+      "text": "Takácsova monografija istražuje cistercitsku opatiju Bélakút/Pétervárad.",
+      "topic": "Sakralna baština i poreklo navoda",
+      "location": {
+        "modern_name": "Petrovaradin, Novi Sad"
+      },
+      "evidence": [
+        {
+          "source_id": "takacs-1989",
+          "locator": "Naslov monografije, izdanje Forum 1989",
+          "locator_kind": "other",
+          "role": "supports",
+          "passage_kind": "paraphrase",
+          "passage": "Ovaj zapis je bibliografska polazna tačka za srednjovekovnu sakralnu baštinu. Franjevački samostan je druga ustanova.",
+          "transcription": "unverified"
+        }
+      ],
+      "status": "unknown"
+    }
+  ],
+  "dossiers": [
+    {
+      "dossier_id": "petrovaradin-1716",
+      "title": "Bitka kod Petrovaradina 1716.",
+      "summary": "Tri publikacije koje poredimo smeštaju bitku kod Petrovaradina na 5. avgust 1716. Brojke čitamo uz datum, namenu dokumenta i ono što je svaki izvor brojao.",
+      "claim_ids": [
+        "date-place-serbian",
+        "date-place-turkish",
+        "date-place-hungarian",
+        "artillery-eugene",
+        "artillery-nusretname",
+        "artillery-vienna",
+        "battle-map-rct-layers",
+        "battle-losses-browne"
+      ]
+    },
+    {
+      "dossier_id": "petrovaradin-gradnja-1753-1754",
+      "title": "Gradnja Petrovaradinske tvrđave 1753–1754.",
+      "summary": "Raportni i projektni plan razdvaja radove prijavljene kao izvedene 1753. od radova predloženih za 1754. Na primeru Beogradske kapije vidi se koliko precizno možemo datovati početak i završetak gradnje.",
+      "claim_ids": [
+        "plan-reported-1753",
+        "plan-proposed-1754",
+        "belgrade-gate-start",
+        "belgrade-gate-later-plan"
+      ]
+    },
+    {
+      "dossier_id": "petrovaradin-opsada-1694",
+      "title": "Opsada Petrovaradina 1694.",
+      "summary": "Osmanska hronika, habzburški plan i dnevnik Imrea Thökölyja beleže opsadu iz različitih položaja. Datumski raspon na karti, procena trajanja i dnevnički zapis čitaju se u kontekstu njihovog obuhvata.",
+      "claim_ids": [
+        "opsada-1694-oruc-trajanje",
+        "opsada-1694-karta-raspon",
+        "opsada-1694-thokoly-septembar"
+      ]
+    },
+    {
+      "dossier_id": "petrovaradin-paleolit",
+      "title": "Paleolitski nalazi na Petrovaradinskoj tvrđavi",
+      "summary": "Arheološki dosije povezuje zaštitna iskopavanja sa datovanjima slojeva. Više faza ljudskog prisustva samo po sebi ne dokazuje kontinuitet naseljavanja.",
+      "claim_ids": [
+        "paleolit-2014-stratigrafija",
+        "paleolit-2b-90ka",
+        "paleolit-2a-43ka",
+        "paleolit-1-gravetijen"
+      ]
+    },
+    {
+      "dossier_id": "petrovaradin-samostan-sv-franje",
+      "title": "Samostan Sv. Franje i vojna bolnica u Petrovaradinu",
+      "summary": "Dosije prati faznu izgradnju baroknog sklopa u Donjem gradu i dokumentuje da su samostan i crkva menjali namenu u različito vreme.",
+      "claim_ids": [
+        "franjevci-faze-gradnje",
+        "franjevci-pogled-1769",
+        "franjevci-bolnica-1783",
+        "franjevci-ukidanje-1786",
+        "franjevci-crkva-1808",
+        "franjevci-marija-pomocnica",
+        "belakut-medieval-monastery"
+      ]
+    }
+  ]
+}

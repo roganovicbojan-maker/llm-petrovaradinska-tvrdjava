@@ -10,7 +10,7 @@ from llm_petrovaradinska_tvrdjava.models import (
     Catalog,
     Claim,
     Estimate,
-    Evidence,
+    EvidenceLink,
     Place,
     Review,
     Source,
@@ -48,22 +48,23 @@ def claim(source: Source) -> Claim:
         topic="Test topic",
         event_interval=TemporalInterval(start_year=90000, calendar="bp", approximate=True),
         location=Place(original_name="Fixture old name", modern_name="Fixture modern name"),
-        evidence=Evidence(
-            source_id=source.source_id,
-            locator_kind="page",
-            locator="42",
-            passage_kind="paraphrase",
-            passage="Synthetic test passage",
-            transcription="original_checked",
-        ),
+        evidence=[
+            EvidenceLink(
+                role="supports",
+                source_id=source.source_id,
+                locator_kind="page",
+                locator="42",
+                passage_kind="paraphrase",
+                passage="Synthetic test passage",
+                transcription="original_checked",
+            )
+        ],
         status="unknown",
     )
 
 
 def test_checked_in_catalog(capsys: pytest.CaptureFixture[str]) -> None:
-    catalog_path = Path(__file__).resolve().parents[1] / "data" / "catalog" / "catalog.json"
-
-    assert main([str(catalog_path)]) == 0
+    assert main([]) == 0
     assert "valid" in capsys.readouterr().out
 
 
@@ -77,21 +78,21 @@ def test_cli_rejects_invalid_json(tmp_path: Path, capsys: pytest.CaptureFixture[
 
 def test_missing_source_rejected(claim: Claim) -> None:
     with pytest.raises(ValidationError, match="unknown source_id"):
-        Catalog(schema_version=1, sources=[], claims=[claim])
+        Catalog(schema_version=2, sources=[], claims=[claim])
 
 
 def test_duplicate_ids_rejected(source: Source, claim: Claim) -> None:
     with pytest.raises(ValidationError, match="Duplicate source_id"):
-        Catalog(schema_version=1, sources=[source, source], claims=[])
+        Catalog(schema_version=2, sources=[source, source], claims=[])
 
     with pytest.raises(ValidationError, match="Duplicate claim_id"):
-        Catalog(schema_version=1, sources=[source], claims=[claim, claim])
+        Catalog(schema_version=2, sources=[source], claims=[claim, claim])
 
 
 def test_discovery_source_rejected(source: Source, claim: Claim) -> None:
     discovery_source = Source.model_validate({**source.model_dump(), "use": "discovery_only"})
     with pytest.raises(ValidationError, match="discovery-only"):
-        Catalog(schema_version=1, sources=[discovery_source], claims=[claim])
+        Catalog(schema_version=2, sources=[discovery_source], claims=[claim])
 
 
 def test_confirmed_requires_review(claim: Claim) -> None:
@@ -100,20 +101,20 @@ def test_confirmed_requires_review(claim: Claim) -> None:
 
 
 def test_raw_ocr_cannot_support_reviewed_claim(source: Source, claim: Claim) -> None:
-    passage = Evidence.model_validate(
-        {**claim.evidence.model_dump(), "transcription": "unverified_ocr"}
+    passage = EvidenceLink.model_validate(
+        {**claim.evidence[0].model_dump(), "transcription": "unverified_ocr"}
     )
     reviewed_claim = Claim.model_validate(
         {
             **claim.model_dump(),
-            "evidence": passage,
+            "evidence": [passage],
             "status": "confirmed",
             "confidence": "high",
             "review": Review(checked_on=date(2026, 11, 19), reviewer="Test reviewer"),
         }
     )
     with pytest.raises(ValidationError, match="require checked passages"):
-        Catalog(schema_version=1, sources=[source], claims=[reviewed_claim])
+        Catalog(schema_version=2, sources=[source], claims=[reviewed_claim])
 
 
 def test_disputed_requires_both_sides(claim: Claim) -> None:
@@ -132,8 +133,8 @@ def test_catalog_keeps_contradictory_estimates(source: Source, claim: Claim) -> 
     other_source = Source.model_validate(
         {**source.model_dump(), "source_id": "fixture-other-source", "title": "Other fixture"}
     )
-    other_passage = Evidence.model_validate(
-        {**claim.evidence.model_dump(), "source_id": other_source.source_id, "locator": "58"}
+    other_passage = EvidenceLink.model_validate(
+        {**claim.evidence[0].model_dump(), "source_id": other_source.source_id, "locator": "58"}
     )
     estimate = Estimate(
         value=Decimal("700"),
@@ -147,8 +148,10 @@ def test_catalog_keeps_contradictory_estimates(source: Source, claim: Claim) -> 
             "status": "disputed",
             "confidence": "medium",
             "review": Review(checked_on=date(2026, 11, 19), reviewer="Test reviewer"),
-            "supporting_evidence": [claim.evidence],
-            "contradicting_evidence": [other_passage],
+            "evidence": [
+                claim.evidence[0],
+                other_passage.model_copy(update={"role": "contradicts"}),
+            ],
             "disagreement_notes": "Test sources give two counts",
             "estimate": estimate,
         }
@@ -157,12 +160,12 @@ def test_catalog_keeps_contradictory_estimates(source: Source, claim: Claim) -> 
         {
             **claim.model_dump(),
             "claim_id": "fixture-other-claim",
-            "evidence": other_passage,
+            "evidence": [other_passage],
             "estimate": {**estimate.model_dump(), "value": "900"},
         }
     )
     catalog = Catalog(
-        schema_version=1, sources=[source, other_source], claims=[first_claim, second_claim]
+        schema_version=2, sources=[source, other_source], claims=[first_claim, second_claim]
     )
     restored = Catalog.model_validate_json(catalog.model_dump_json())
 
@@ -190,3 +193,88 @@ def test_primary_source_needs_context(source: Source) -> None:
 def test_calendar_interval_validation() -> None:
     with pytest.raises(ValidationError, match="ordered numerically"):
         TemporalInterval(start_year=1716, end_year=1694, calendar="julian")
+
+
+def test_only_documented_normalization_is_allowed() -> None:
+    with pytest.raises(ValidationError, match="numeric year or a normalized ISO"):
+        TemporalInterval(original_expression="late in the campaign")
+    with pytest.raises(ValidationError, match="Document the conversion"):
+        TemporalInterval(calendar="julian", iso_start="1716-08-05", precision="day")
+    with pytest.raises(ValidationError, match="day is out of range"):
+        TemporalInterval(calendar="gregorian", iso_start="1716-02-30", precision="day")
+
+    interval = TemporalInterval(
+        calendar="julian",
+        original_expression="25 July 1716",
+        iso_start="1716-08-05",
+        precision="day",
+        conversion_method="Independently checked calendar conversion",
+    )
+    assert interval.iso_start == "1716-08-05"
+
+
+@pytest.mark.parametrize(
+    ("field", "value"), [("language", "xx-banana"), ("script", "foo"), ("script", "Fooo")]
+)
+def test_unregistered_language_and_script_are_rejected(
+    source: Source, field: str, value: str
+) -> None:
+    with pytest.raises(ValidationError, match=field):
+        Source.model_validate({**source.model_dump(), field: value})
+
+
+def test_quote_limit_depends_on_source_rights(source: Source, claim: Claim) -> None:
+    quoted = claim.evidence[0].model_copy(
+        update={"passage_kind": "quotation", "passage": "word, " * 15 + "word"}
+    )
+    quoted_claim = claim.model_copy(update={"evidence": [quoted]})
+    with pytest.raises(ValidationError, match="quotation exceeds 15 words"):
+        Catalog(schema_version=2, sources=[source], claims=[quoted_claim])
+    open_source = source.model_copy(update={"copyright_status": "open_license"})
+    Catalog(schema_version=2, sources=[open_source], claims=[quoted_claim])
+
+
+def test_confirmed_requires_disjoint_provenance_for_two_supports(
+    source: Source, claim: Claim
+) -> None:
+    other = source.model_copy(update={"source_id": "other"})
+    derived = source.model_copy(
+        update={"source_id": "derived", "derived_from": [other.source_id, source.source_id]}
+    )
+    support = claim.evidence[0]
+    confirmed = Claim.model_validate(
+        {
+            **claim.model_dump(),
+            "status": "confirmed",
+            "confidence": "high",
+            "review": Review(checked_on=date(2026, 11, 19), reviewer="Test reviewer"),
+        }
+    )
+    real_sources = [derived, other, source]
+    overlap = support.model_copy(update={"source_id": derived.source_id})
+    for evidence in ([support], [support, overlap], [overlap]):
+        with pytest.raises(ValidationError, match="two independent root sources"):
+            Catalog(
+                schema_version=2,
+                sources=real_sources,
+                claims=[confirmed.model_copy(update={"evidence": evidence})],
+            )
+    independent = support.model_copy(update={"source_id": other.source_id})
+    Catalog(
+        schema_version=2,
+        sources=real_sources,
+        claims=[confirmed.model_copy(update={"evidence": [support, independent]})],
+    )
+
+
+def test_source_provenance_rejects_unknown_parents_and_cycles(source: Source) -> None:
+    with pytest.raises(ValidationError, match="unknown derived_from"):
+        Catalog(
+            schema_version=2,
+            sources=[source.model_copy(update={"derived_from": ["missing"]})],
+            claims=[],
+        )
+    other = source.model_copy(update={"source_id": "other", "derived_from": [source.source_id]})
+    cyclic = source.model_copy(update={"derived_from": [other.source_id]})
+    with pytest.raises(ValidationError, match="provenance cycle"):
+        Catalog(schema_version=2, sources=[cyclic, other], claims=[])

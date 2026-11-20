@@ -29,7 +29,6 @@ dist/
 !/data/README.md
 !/data/catalog/
 /data/catalog/*
-!/data/catalog/catalog.json
 !/data/catalog/README.md
 *.pdf
 *.epub
