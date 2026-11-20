@@ -6,6 +6,7 @@ from pydantic import ValidationError
 
 from llm_petrovaradinska_tvrdjava.api import create_app
 from llm_petrovaradinska_tvrdjava.catalog import load_catalog
+from llm_petrovaradinska_tvrdjava.models import Catalog
 from llm_petrovaradinska_tvrdjava.reviews import Dossier, load_demo_dossier
 from tools.review_comparison import main
 
@@ -38,6 +39,51 @@ def test_bad_intermediary_is_rejected() -> None:
     payload["comparisons"][1]["observations"][1]["via"]["source_id"] = "missing"
     with pytest.raises(ValidationError, match="Unknown intermediary"):
         Dossier.model_validate(payload)
+
+
+def test_disputed_claim_includes_both_sides_in_html_and_api() -> None:
+    catalog = load_catalog().model_dump(mode="json")
+    claim = next(item for item in catalog["claims"] if item["claim_id"] == "artillery-eugene")
+    claim.update(
+        status="disputed",
+        confidence="medium",
+        disagreement_notes="Synthetic disagreement",
+        review={"reviewer": "Test reviewer", "checked_on": "2026-11-20"},
+    )
+    claim["evidence"][0]["transcription"] = "original_checked"
+    claim["evidence"].append(
+        {
+            "source_id": "vienna-inventory-viii-56a",
+            "locator_kind": "archival_unit",
+            "locator": "Synthetic opposing locator",
+            "passage_kind": "paraphrase",
+            "passage": "Synthetic opposing passage",
+            "role": "contradicts",
+            "transcription": "original_checked",
+        }
+    )
+    with TestClient(create_app(catalog_loader=lambda: Catalog.model_validate(catalog))) as client:
+        api = client.get(f"/api/v1/reviews/{DOSSIER_ID}").json()
+        html = client.get(f"/reviews/{DOSSIER_ID}").text
+    row = api["comparisons"][1]["observations"][0]
+    assert row["status"] == "disputed"
+    assert row["estimate"]["value"] == "100"
+    assert [item["role"] for item in row["evidence"]] == ["supports", "contradicts"]
+    for label in ("Sporno", "Protivreči", "Synthetic opposing locator", "2026-11-20"):
+        assert label in html
+
+
+def test_catalog_rejects_unrelated_and_reversed_intermediary_chains() -> None:
+    payload = load_catalog().model_dump(mode="json")
+    Catalog.model_validate(payload)
+    claim = next(item for item in payload["claims"] if item["claim_id"] == "artillery-nusretname")
+    claim["evidence"][0]["via"]["source_id"] = "jokic-2011"
+    with pytest.raises(ValidationError, match="Undocumented intermediary chain"):
+        Catalog.model_validate(payload)
+    claim["evidence"][0]["source_id"] = "karagoz-2014"
+    claim["evidence"][0]["via"]["source_id"] = "nusretname"
+    with pytest.raises(ValidationError, match="Undocumented intermediary chain"):
+        Catalog.model_validate(payload)
 
 
 def test_editor_can_record_a_review_without_changing_the_observation(tmp_path: Path) -> None:

@@ -2,10 +2,25 @@ from html import escape
 from importlib.resources import files
 from string import Template
 
-from .reviews import Citation, Dossier, DossierSource, Observation, ReviewMatch
+from .models import Citation
+from .reviews import Dossier, DossierSource, Observation, ReviewMatch
 
 KIND_LABEL = {"primary": "Primarni izvor", "secondary": "Sekundarni izvor", "map": "Karta"}
 VERDICT_LABEL = {"verified": "Proveren navod", "needs_context": "Potreban kontekst"}
+STATUS_LABEL = {
+    "confirmed": "Potvrđeno",
+    "probable": "Verovatno",
+    "disputed": "Sporno",
+    "refuted": "Opovrgnuto",
+    "unknown": "Nepoznato",
+}
+CONFIDENCE_LABEL = {
+    "low": "niska",
+    "medium": "srednja",
+    "high": "visoka",
+    "unassessed": "neprocenjena",
+}
+ROLE_LABEL = {"supports": "Potkrepljuje", "contradicts": "Protivreči", "context": "Kontekst"}
 
 
 def render_citation(citation: Citation, source: DossierSource) -> str:
@@ -13,29 +28,80 @@ def render_citation(citation: Citation, source: DossierSource) -> str:
     locator = escape(citation.locator)
     if source.url:
         title = f'<a href="{escape(str(source.url))}">{title}</a>'
-    return f"{title}<small>{locator}</small>"
+    edition = (
+        f"<small>{escape(source.edition_or_translation)}</small>"
+        if (source.edition_or_translation)
+        else ""
+    )
+    bibliography = (
+        f"<small>{escape(source.bibliography)}</small>"
+        if (source.bibliography and source.bibliography != source.title)
+        else ""
+    )
+    year = (
+        f"<small>Godina izdanja {source.publication_year}</small>"
+        if (source.publication_year is not None)
+        else ""
+    )
+    return f"{title}{edition}{year}{bibliography}<small>{locator}</small>"
 
 
 def render_observation(row: Observation, sources: dict[str, DossierSource]) -> str:
     source = sources[row.citation.source_id]
-    citation = render_citation(row.citation, source)
-    if row.via:
-        intermediary = render_citation(row.via, sources[row.via.source_id])
-        citation += f'<div class="via">Prema posredniku<br>{intermediary}</div>'
+    items = []
+    for evidence in row.evidence:
+        citation = render_citation(
+            Citation(source_id=evidence.source_id, locator=evidence.locator), evidence.source
+        )
+        if evidence.via and evidence.intermediary:
+            intermediary = render_citation(evidence.via, evidence.intermediary)
+            citation += f'<div class="via">Prema posredniku<br>{intermediary}</div>'
+        reason = evidence.locator_unavailable_reason
+        item = f"<strong>{ROLE_LABEL[evidence.role]}</strong><br>{citation}"
+        if reason:
+            item += f"<small>Nedostupan lokator. {escape(reason)}</small>"
+        item += f"<small>{escape(evidence.passage)}</small>"
+        items.append(f"<li>{item}</li>")
+    evidence_html = f"<ul>{''.join(items)}</ul>"
 
     review = row.review
     label = VERDICT_LABEL[review.verdict] if review else "Čeka proveru"
-    status = f'<span class="status">{label}</span>'
+    status = (
+        f'<span class="status">{STATUS_LABEL[row.status]}</span>'
+        f"<small>Pouzdanost: {CONFIDENCE_LABEL[row.confidence]}</small>"
+    )
+    if row.expert_review:
+        expert = row.expert_review
+        status += (
+            f"<small>Stručna provera: {escape(expert.reviewer)} "
+            f"({expert.checked_on.isoformat()})</small>"
+        )
+    status += f"<small>Urednička provera izvora: {label}</small>"
     if review:
         status += (
             f"<small>{escape(review.reviewer)} · {review.checked_on.isoformat()}</small>"
             f"<small>{escape(review.note)}</small>"
         )
+    details = ""
+    if row.disagreement_notes:
+        details += f"<small>Neslaganje: {escape(row.disagreement_notes)}</small>"
+    if row.estimate:
+        estimate = row.estimate
+        bounds = f"{estimate.low}–{estimate.high}" if estimate.low is not None else ""
+        value = str(estimate.value) if estimate.value is not None else bounds
+        if estimate.value is not None and bounds:
+            value += f" ({bounds})"
+        qualifier = "oko " if estimate.approximate else ""
+        details += (
+            f"<small>Procena: {qualifier}{value} {escape(estimate.unit)}. "
+            f"{escape(estimate.counted_population)}. "
+            f"{escape(estimate.counting_definition)}</small>"
+        )
     return (
         f'<tr id="{escape(row.observation_id)}"><th scope="row">'
         f"{escape(source.tradition)}<small>{KIND_LABEL[source.kind]}</small></th>"
-        f"<td><strong>{escape(row.value)}</strong><small>{escape(row.context)}</small></td>"
-        f"<td>{citation}</td><td>{status}</td></tr>"
+        f"<td><strong>{escape(row.value)}</strong>{details}</td>"
+        f"<td>{evidence_html}</td><td>{status}</td></tr>"
     )
 
 

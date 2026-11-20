@@ -143,4 +143,4 @@ Validator kao argument prima i putanju do drugog JSON kataloga. Testovi rade bez
 
 ## Licenca
 
-Vlasnik projekta treba da odluči o licenci koda i metapodataka. Status prava nad svakim istorijskim izvorom beleži se posebno.
+Kod je pod [MIT licencom](LICENSE), a autorski metapodaci pod [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Prava nad istorijskom građom su opisana u [uputstvu za podatke](data/README.md).

@@ -22,5 +22,11 @@ jobs:
       - run: python -m ruff check .
       - run: python -m ruff format --check .
       - run: python -m mypy src
-      - run: python -m pytest --cov=llm_petrovaradinska_tvrdjava --cov-report=term-missing
+      - run: python -m pytest --cov=llm_petrovaradinska_tvrdjava --cov-report=term-missing --cov-fail-under=90
+      - run: python tools/evaluate_retrieval.py
       - run: python tools/validate_catalog.py
+      - run: python -m pip wheel --no-deps --wheel-dir dist .
+      - name: Install the built wheel
+        run: python -c "from pathlib import Path; import subprocess, sys; subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--force-reinstall', '--no-deps', str(next(Path('dist').glob('*.whl')))])"
+      - name: Verify the installed wheel
+        run: python -m pytest tests/test_health.py tests/test_reviews.py -q

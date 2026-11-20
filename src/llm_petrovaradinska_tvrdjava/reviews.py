@@ -5,7 +5,24 @@ from typing import Annotated, Literal, Self
 from pydantic import Field, HttpUrl, model_validator
 
 from .catalog import load_catalog
-from .models import RECORD_ID_PATTERN, Citation, Record, RecordId, SourceReview, Text
+from .models import (
+    RECORD_ID_PATTERN,
+    Catalog,
+    Citation,
+    ClaimStatus,
+    Confidence,
+    DatingInfo,
+    Estimate,
+    EvidenceLink,
+    Place,
+    Record,
+    RecordId,
+    Review,
+    Source,
+    SourceReview,
+    TemporalInterval,
+    Text,
+)
 
 
 class DossierSource(Record):
@@ -14,6 +31,14 @@ class DossierSource(Record):
     tradition: Text
     kind: Literal["primary", "secondary", "map"]
     url: HttpUrl | None = None
+    bibliography: Text | None = None
+    edition_or_translation: Text | None = None
+    publication_year: int | None = None
+
+
+class DossierEvidence(EvidenceLink):
+    source: DossierSource
+    intermediary: DossierSource | None = None
 
 
 class Observation(Record):
@@ -23,6 +48,15 @@ class Observation(Record):
     value: Text
     context: Text
     review: SourceReview | None = None
+    status: ClaimStatus = "unknown"
+    confidence: Confidence = "unassessed"
+    expert_review: Review | None = None
+    evidence: list[DossierEvidence] = Field(default_factory=list)
+    estimate: Estimate | None = None
+    dating: DatingInfo | None = None
+    event_interval: TemporalInterval | None = None
+    location: Place | None = None
+    disagreement_notes: Text | None = None
 
 
 class Comparison(Record):
@@ -71,10 +105,29 @@ def load_demo_dossier() -> Dossier:
     return load_dossier("petrovaradin-1716")
 
 
-def load_dossiers() -> list[Dossier]:
-    catalog = load_catalog()
+def project_source(source: Source) -> DossierSource:
+    kind: Literal["primary", "secondary", "map"] = "secondary"
+    if source.source_type == "map":
+        kind = "map"
+    elif source.source_class == "primary":
+        kind = "primary"
+    return DossierSource(
+        source_id=source.source_id,
+        title=source.title,
+        tradition=source.tradition or source.author_or_institution,
+        kind=kind,
+        url=source.url,
+        bibliography=source.bibliography,
+        edition_or_translation=source.edition_or_translation,
+        publication_year=source.publication_year,
+    )
+
+
+def load_dossiers(catalog: Catalog | None = None) -> list[Dossier]:
+    if catalog is None:
+        catalog = load_catalog()
     claims = {claim.claim_id: claim for claim in catalog.claims}
-    sources = {source.source_id: source for source in catalog.sources}
+    sources = {source.source_id: project_source(source) for source in catalog.sources}
     dossiers = []
     for definition in catalog.dossiers:
         groups: dict[str, list[Observation]] = {}
@@ -82,9 +135,22 @@ def load_dossiers() -> list[Dossier]:
         for claim_id in definition.claim_ids:
             claim = claims[claim_id]
             evidence = claim.evidence[0]
-            source_ids[evidence.source_id] = None
-            if evidence.via:
-                source_ids[evidence.via.source_id] = None
+            evidence_rows = []
+            for item in claim.evidence:
+                source_ids[item.source_id] = None
+                intermediary = None
+                if item.via:
+                    source_ids[item.via.source_id] = None
+                    intermediary = sources[item.via.source_id]
+                evidence_rows.append(
+                    DossierEvidence.model_validate(
+                        {
+                            **item.model_dump(),
+                            "source": sources[item.source_id],
+                            "intermediary": intermediary,
+                        }
+                    )
+                )
             groups.setdefault(claim.topic, []).append(
                 Observation(
                     observation_id=claim_id,
@@ -93,23 +159,15 @@ def load_dossiers() -> list[Dossier]:
                     value=claim.text,
                     context=evidence.passage,
                     review=claim.editorial_review,
-                )
-            )
-        dossier_sources = []
-        for source_id in source_ids:
-            source = sources[source_id]
-            kind: Literal["primary", "secondary", "map"] = "secondary"
-            if source.source_type == "map":
-                kind = "map"
-            elif source.source_class == "primary":
-                kind = "primary"
-            dossier_sources.append(
-                DossierSource(
-                    source_id=source_id,
-                    title=source.title,
-                    tradition=source.tradition or source.author_or_institution,
-                    kind=kind,
-                    url=source.url,
+                    status=claim.status,
+                    confidence=claim.confidence,
+                    expert_review=claim.review,
+                    evidence=evidence_rows,
+                    estimate=claim.estimate,
+                    dating=claim.dating,
+                    event_interval=claim.event_interval,
+                    location=claim.location,
+                    disagreement_notes=claim.disagreement_notes,
                 )
             )
         dossiers.append(
@@ -117,7 +175,7 @@ def load_dossiers() -> list[Dossier]:
                 dossier_id=definition.dossier_id,
                 title=definition.title,
                 summary=definition.summary,
-                sources=dossier_sources,
+                sources=[sources[source_id] for source_id in source_ids],
                 comparisons=[
                     Comparison(topic=topic, observations=rows) for topic, rows in groups.items()
                 ],
@@ -161,11 +219,25 @@ QUESTION_WORDS = {
 }
 SEARCH_ALIASES = {
     "peterwardein": "petrovaradin",
+    "petervardein": "petrovaradin",
     "petervarad": "petrovaradin",
     "petervaradin": "petrovaradin",
     "varadin": "petrovaradin",
     "predlozeno": "predlozeni",
     "pomocnice": "pomocnica",
+    "kapije": "kapija",
+    "kapiju": "kapija",
+    "beogradsku": "beogradska",
+    "beogradske": "beogradska",
+    "opatiju": "opatija",
+    "gubitaka": "gubici",
+    "marije": "marija",
+    "sedimenta": "sediment",
+    "redeponovan": "redepozicija",
+    "opsade": "opsada",
+    "opsadu": "opsada",
+    "topovi": "topova",
+    "topove": "topova",
 }
 QUERY_CONTEXT = {
     "petrovaradin",
@@ -250,9 +322,16 @@ def search_dossiers(dossiers: list[Dossier], query: str) -> list[ReviewMatch]:
                 evidence_terms = search_terms(
                     f"{row.context} {row.citation.locator} {source.title} {source.tradition}"
                 )
-                if topical_terms and not topical_terms & (
+                if source.kind == "map":
+                    evidence_terms.add("karta")
+                for evidence in row.evidence[1:]:
+                    evidence_terms |= search_terms(
+                        f"{evidence.passage} {evidence.locator} {evidence.source.title}"
+                    )
+                covered_topics = topical_terms & (
                     value_terms | topic_terms | evidence_terms | dossier_terms
-                ):
+                )
+                if topical_terms and len(covered_topics) <= len(topical_terms) // 2:
                     continue
                 score = (
                     4 * len(terms & value_terms)

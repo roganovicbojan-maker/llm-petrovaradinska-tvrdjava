@@ -88,7 +88,12 @@
       "availability": "online",
       "copyright_status": "unknown",
       "ocr_status": "unknown",
-      "url": "https://dergipark.org.tr/tr/download/article-file/102250"
+      "url": "https://dergipark.org.tr/tr/download/article-file/102250",
+      "derived_from": [
+        "nusretname",
+        "vienna-inventory-viii-56a",
+        "browne-campaign-1716-1718"
+      ]
     },
     {
       "source_id": "banlaky-xix-3",
@@ -120,7 +125,10 @@
       "availability": "online",
       "copyright_status": "unknown",
       "ocr_status": "unknown",
-      "url": "https://publicatio.bibl.u-szeged.hu/24903/1/30773525_publikacio.pdf"
+      "url": "https://publicatio.bibl.u-szeged.hu/24903/1/30773525_publikacio.pdf",
+      "derived_from": [
+        "banlaky-xix-3"
+      ]
     },
     {
       "source_id": "eugene-report-56",
@@ -240,7 +248,11 @@
       "availability": "online",
       "copyright_status": "unknown",
       "ocr_status": "unknown",
-      "url": "https://doi.org/10.18485/ms_zmsi.2023.108.2"
+      "url": "https://doi.org/10.18485/ms_zmsi.2023.108.2",
+      "derived_from": [
+        "kriegsarchiv-plan-15",
+        "bms-pg-iii-16"
+      ]
     },
     {
       "source_id": "bms-pg-iii-16",
@@ -322,7 +334,10 @@
       "availability": "online",
       "copyright_status": "unknown",
       "ocr_status": "unknown",
-      "url": "https://dergipark.org.tr/tr/download/article-file/73979"
+      "url": "https://dergipark.org.tr/tr/download/article-file/73979",
+      "derived_from": [
+        "thokoly-dnevnik-1694"
+      ]
     },
     {
       "source_id": "mihailovic-2014",
@@ -372,7 +387,10 @@
       "availability": "online",
       "copyright_status": "unknown",
       "ocr_status": "unknown",
-      "url": "https://hrcak.srce.hr/file/243996"
+      "url": "https://hrcak.srce.hr/file/243996",
+      "derived_from": [
+        "menguzzi-1769"
+      ]
     },
     {
       "source_id": "menguzzi-1769",
@@ -404,7 +422,10 @@
       "availability": "online",
       "copyright_status": "unknown",
       "ocr_status": "unknown",
-      "url": "https://www.zkvh.org.rs/storage/app/uploads/public/61a/0dd/37e/61a0dd37ec1d3792256898.pdf"
+      "url": "https://www.zkvh.org.rs/storage/app/uploads/public/61a/0dd/37e/61a0dd37ec1d3792256898.pdf",
+      "derived_from": [
+        "matos-1987"
+      ]
     },
     {
       "source_id": "takacs-1989",
@@ -550,7 +571,14 @@
           "transcription": "unverified"
         }
       ],
-      "status": "unknown"
+      "status": "unknown",
+      "estimate": {
+        "value": "100",
+        "unit": "topova",
+        "counted_population": "Zaplena prema Eugenovom izvestaju",
+        "counting_definition": "Privremeni broj zaplenjenih topova",
+        "approximate": true
+      }
     },
     {
       "claim_id": "artillery-nusretname",
@@ -574,7 +602,13 @@
           }
         }
       ],
-      "status": "unknown"
+      "status": "unknown",
+      "estimate": {
+        "value": "160",
+        "unit": "topova",
+        "counted_population": "Orudja ostavljena na bojistu",
+        "counting_definition": "Broj prema hronici preko posrednika; kategorije orudja nisu proverene"
+      }
     },
     {
       "claim_id": "artillery-vienna",
@@ -598,7 +632,13 @@
           }
         }
       ],
-      "status": "unknown"
+      "status": "unknown",
+      "estimate": {
+        "value": "175",
+        "unit": "artiljerijskih orudja",
+        "counted_population": "Zaplenjena orudja iz beckog inventara",
+        "counting_definition": "Zbir obuhvata i haubice i muzare"
+      }
     },
     {
       "claim_id": "battle-map-rct-layers",
@@ -642,7 +682,14 @@
           }
         }
       ],
-      "status": "unknown"
+      "status": "unknown",
+      "estimate": {
+        "low": "6000",
+        "high": "7000",
+        "unit": "vojnika",
+        "counted_population": "Habzburski vojnici",
+        "counting_definition": "Poginuli i ranjeni prema navodu koji prenosi Karagoz"
+      }
     },
     {
       "claim_id": "plan-reported-1753",
@@ -1078,7 +1125,8 @@
         "paleolit-2014-stratigrafija",
         "paleolit-2b-90ka",
         "paleolit-2a-43ka",
-        "paleolit-1-gravetijen"
+        "paleolit-1-gravetijen",
+        "petrovaradin-middle-palaeolithic-layer-2b"
       ]
     },
     {

@@ -38,8 +38,12 @@ Zatim postavite `schema_version` na `2` i pokrenite validator.
 ## Dosijei
 
 Katalog je jedini zapis izvora i navoda. Elementi `dossiers` povezuju naslove
-i sazetke dosijea sa `claim_ids`. Za prikaz pojedinacnog navoda koristi se prvi
-dokaz i njegov opcioni `via`; ostali dokazi pripadaju urednickom katalogu.
+i sazetke dosijea sa `claim_ids`. Javni dosije prikazuje sve dokaze.
+Prvi dokaz popunjava i starija polja `citation` i `via` zbog kompatibilnosti API-ja.
+Za `via` katalog zahteva put od posrednika do izvora preko `derived_from`,
+uz lokator u izdanju posrednika. Urednik proverava da taj odlomak prenosi navod.
+Za `locator_kind: unavailable` upiši `locator_unavailable_reason`.
+Gregorijanska godina i izvorni izraz u ISO formatu proveravaju se gde su direktno uporedivi.
 `editorial_review` belezi urednicku proveru prenosa navoda.
 Strucnu potvrdu tvrdnje odvojeno beleze `review` i `status`.
 Migrirani navodi bez dokumentovane provere imaju status `unknown`.

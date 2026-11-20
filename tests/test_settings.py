@@ -9,6 +9,9 @@ def test_environment_overrides_dotenv(tmp_path: Path, monkeypatch: pytest.Monkey
     monkeypatch.chdir(tmp_path)
     monkeypatch.delenv("FORTRESS_DEBUG", raising=False)
     (tmp_path / ".env").write_text("FORTRESS_DEBUG=true\n", encoding="utf-8")
+    monkeypatch.delenv("FORTRESS_ENV_FILE", raising=False)
+    assert Settings.from_environment().debug is False
+    monkeypatch.setenv("FORTRESS_ENV_FILE", str(tmp_path / ".env"))
 
     assert Settings.from_environment().debug is True
     monkeypatch.setenv("FORTRESS_DEBUG", "false")

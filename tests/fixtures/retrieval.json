@@ -109,5 +109,90 @@
   {
     "query": "Koliko traktora je bilo u Petrovaradinu 1694?",
     "expected": []
+  },
+  {
+    "query": "Капије Београдска",
+    "expected": [
+      "belgrade-gate-start"
+    ]
+  },
+  {
+    "query": "Beogradsku kapiju",
+    "expected": [
+      "belgrade-gate-start"
+    ]
+  },
+  {
+    "query": "Петервардеин 1694",
+    "expected": [
+      "opsada-1694-karta-raspon"
+    ]
+  },
+  {
+    "query": "Pétervárad 1694",
+    "expected": [
+      "opsada-1694-karta-raspon"
+    ]
+  },
+  {
+    "query": "Топови 1716",
+    "expected": [
+      "artillery-eugene",
+      "artillery-nusretname"
+    ]
+  },
+  {
+    "query": "Нусретнаме",
+    "expected": [
+      "artillery-nusretname"
+    ]
+  },
+  {
+    "query": "Karagöz gubici Browne",
+    "expected": [
+      "battle-losses-browne"
+    ]
+  },
+  {
+    "query": "црква 1808",
+    "expected": [
+      "franjevci-crkva-1808"
+    ]
+  },
+  {
+    "query": "Bélakút opatija",
+    "expected": [
+      "belakut-medieval-monastery"
+    ]
+  },
+  {
+    "query": "Redepozicija sedimenta 2b",
+    "expected": [
+      "petrovaradin-middle-palaeolithic-layer-2b"
+    ]
+  },
+  {
+    "query": "Metro stanica Petrovaradin 1716",
+    "expected": []
+  },
+  {
+    "query": "Сателитски снимци 1694",
+    "expected": []
+  },
+  {
+    "query": "Paleolit lasersko oružje",
+    "expected": []
+  },
+  {
+    "query": "Aerodrom na tvrđavi",
+    "expected": []
+  },
+  {
+    "query": "Петроварадин Марс",
+    "expected": []
+  },
+  {
+    "query": "WiFi pristup 1754",
+    "expected": []
   }
 ]
