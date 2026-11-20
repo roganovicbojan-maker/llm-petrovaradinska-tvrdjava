@@ -50,7 +50,7 @@ def main() -> int:
                 "ollama_timeout": args.timeout or defaults.ollama_timeout,
             }
         )
-        passed = answered = 0
+        passed = answered = grounded_cases = false_answers = 0
         with TestClient(create_app(settings=settings)) as client:
             if (
                 args.retrieval == "hybrid"
@@ -69,9 +69,12 @@ def main() -> int:
                     match = body.get("status") == "answered" and expected <= references
                 else:
                     match = body.get("status") == "insufficient_evidence"
-                answered += int(body.get("status") == "answered")
+                has_answer = body.get("status") == "answered"
+                answered += int(has_answer)
                 retrieval = response.headers.get("X-Fortress-Retrieval", "unknown")
                 match = match and retrieval == args.retrieval
+                grounded_cases += int(bool(expected) and match)
+                false_answers += int(not expected and has_answer)
                 passed += int(match)
                 failures += int(not match)
                 outcome = "pass" if match else "fail"
@@ -81,8 +84,12 @@ def main() -> int:
                     f"{status} {retrieval} {perf_counter() - start:.1f}s {sorted(references)}",
                     flush=True,
                 )
+        positives = sum(bool(expected) for _, expected in cases)
+        negatives = len(cases) - positives
         print(
-            f"{model} [{args.retrieval}]: {passed}/{len(cases)} passed, {answered} answered",
+            f"{model} [{args.retrieval}]: {passed}/{len(cases)} passed, {answered} answered. "
+            f"Positive answers with expected IDs: {grounded_cases}/{positives}. "
+            f"Answered negatives: {false_answers}/{negatives}.",
             flush=True,
         )
     return int(bool(failures))
