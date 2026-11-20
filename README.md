@@ -27,8 +27,8 @@ Try searching for `topova 1716` and then `Koliko je stanovnika imao Petrovaradin
 The second question has no supporting records in the current dossiers.
 
 The optional Ollama adapter generates structured claims from retrieved records. The API
-validates each evidence ID and checks that numeric tokens appear in the cited records. Historical
-support is reviewed separately. The public dossiers are projected from the versioned catalog. See the [local model setup](#rag-odgovori-uz-lokalni-model).
+checks every claim against evidence from its declared source and runs a separate model call
+to assess whether that evidence supports the full claim. Editorial reviews are tracked in the catalog. The public dossiers are projected from the versioned catalog. See the [local model setup](#rag-odgovori-uz-lokalni-model).
 
 ## Instalacija u PowerShell-u
 
@@ -75,10 +75,9 @@ Leksička pretraga vraća navode sa lokatorima i posrednim izvorima preko
 ### RAG odgovori uz lokalni model
 
 Na stranici `/reviews` polje **Pitanje o tvrđavi** koristi isti korpus kao pretraga.
-Aplikacija pronalazi relevantne navode, prosleđuje ih lokalnom modelu i proverava
-da li se svaki citat odnosi na neki od prosleđenih navoda. Stranica uz svaki iskaz
-vezuje izvor i lokator. Provera identifikatora citata je strukturna.
-Urednička provera i dalje je potrebna za ocenu istorijske tačnosti iskaza.
+Aplikacija pronalazi relevantne navode, proverava brojke u dokazima imenovanog izvora
+i drugim pozivom modelu ocenjuje da li je ceo iskaz potkrepljen. Stranica uz svaki
+iskaz prikazuje izvor i lokator. Stručna provera navoda evidentira se u katalogu.
 
 Instalirajte [Ollama](https://ollama.com/download), pokrenite ga i u Git Bash-u
 preuzmite model sa podrškom za strukturirani izlaz:
@@ -91,8 +90,19 @@ export FORTRESS_OLLAMA_MODEL=qwen3:4b
 
 Umesto `export` možete upisati `FORTRESS_OLLAMA_MODEL=qwen3:4b` u `.env`.
 Za drugi Ollama servis podesite FORTRESS_OLLAMA_BASE_URL i FORTRESS_OLLAMA_TIMEOUT.
+Za zaseban model koji ocenjuje iskaze podesite FORTRESS_OLLAMA_VERIFIER_MODEL.
+Bez te promenljive isti model obavlja oba poziva.
 Podrazumevano Ollama sluša na `127.0.0.1:11434`. JSON API prihvata
 `POST /api/v1/answers` sa telom `{"question":"Šta je predloženo za 1754?"}`.
+
+Poređenje lokalno instaliranih modela u Git Bash-u:
+
+```bash
+./.venv/Scripts/python.exe tools/evaluate_generation.py --models qwen3:4b qwen3:8b
+```
+
+Izveštaj beleži očekivane citate, uzdržavanje, statuse grešaka i vreme.
+Rezultati zavise od lokalnih modela, a sadržaj generisanih iskaza zahteva uredničku proveru.
 
 Predložena demo pitanja
 

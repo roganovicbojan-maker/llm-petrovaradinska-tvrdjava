@@ -194,5 +194,75 @@
   {
     "query": "WiFi pristup 1754",
     "expected": []
+  },
+  {
+    "query": "How many cannons were captured at Peterwardein in 1716?",
+    "expected": [
+      "artillery-eugene"
+    ]
+  },
+  {
+    "query": "Wie viele Kanonen wurden bei Peterwardein 1716 erbeutet?",
+    "expected": [
+      "artillery-eugene"
+    ]
+  },
+  {
+    "query": "Hány ágyút zsákmányoltak Pétervárad 1716?",
+    "expected": [
+      "artillery-eugene"
+    ]
+  },
+  {
+    "query": "1716 Petervaradin kaç top ele geçirildi?",
+    "expected": [
+      "artillery-eugene"
+    ]
+  },
+  {
+    "query": "Petrovardin 1716",
+    "expected": [
+      "date-place-hungarian",
+      "date-place-turkish",
+      "date-place-serbian"
+    ]
+  },
+  {
+    "query": "gubici Osmanlija",
+    "expected": [
+      "battle-losses-ottoman-browne",
+      "battle-losses-ottoman-karagoz"
+    ]
+  },
+  {
+    "query": "Ко је командовао Турцима 1716?",
+    "expected": [
+      "battle-command-ottoman"
+    ]
+  },
+  {
+    "query": "Kada je izgrađena Donja tvrđava?",
+    "expected": []
+  },
+  {
+    "query": "Who built the fortress?",
+    "expected": []
+  },
+  {
+    "query": "Koliko je topova Eugen prijavio kao zaplenjene 1716?",
+    "expected": [
+      "artillery-eugene"
+    ]
+  },
+  {
+    "query": "Koje se procene gubitaka Osmanlija razlikuju u studiji Karagoza o bici 1716?",
+    "expected": [
+      "battle-losses-ottoman-karagoz",
+      "battle-losses-ottoman-browne"
+    ]
+  },
+  {
+    "query": "Ko je komandovao svemirskom flotom kod Petrovaradina?",
+    "expected": []
   }
 ]

@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field, HttpUrl
 class Settings(BaseModel):
     debug: bool = False
     ollama_model: str | None = None
+    ollama_verifier_model: str | None = None
     ollama_base_url: HttpUrl = HttpUrl("http://127.0.0.1:11434")
     ollama_timeout: float = Field(default=90.0, gt=0, allow_inf_nan=False)
     requests_per_minute: int = Field(default=120, ge=1)
@@ -36,6 +37,7 @@ class Settings(BaseModel):
         for field, variable in (
             ("debug", "FORTRESS_DEBUG"),
             ("ollama_model", "FORTRESS_OLLAMA_MODEL"),
+            ("ollama_verifier_model", "FORTRESS_OLLAMA_VERIFIER_MODEL"),
             ("ollama_base_url", "FORTRESS_OLLAMA_BASE_URL"),
             ("ollama_timeout", "FORTRESS_OLLAMA_TIMEOUT"),
             ("requests_per_minute", "FORTRESS_REQUESTS_PER_MINUTE"),

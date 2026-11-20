@@ -21,7 +21,7 @@ def test_review_keeps_different_source_values_and_provenance() -> None:
 
     assert response.status_code == page.status_code == 200
     assert missing.status_code == 404
-    agreement, artillery, map_history, losses = response.json()["comparisons"]
+    agreement, artillery, map_history, losses, *_ = response.json()["comparisons"]
     assert map_history["observations"][0]["citation"]["source_id"] == "rct-rcin-727006"
     assert losses["observations"][0]["via"]["source_id"] == "karagoz-2014"
     assert len({row["value"] for row in agreement["observations"]}) == 1

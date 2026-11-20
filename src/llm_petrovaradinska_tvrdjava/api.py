@@ -14,10 +14,12 @@ from .answers import (
     AnswerGenerator,
     AnswerQuestion,
     AnswerResult,
+    AnswerVerifier,
     InvalidAnswerError,
     ModelUnavailableError,
     answer_question,
     generate_with_ollama,
+    verify_with_ollama,
 )
 from .catalog import load_catalog
 from .models import Catalog
@@ -37,6 +39,7 @@ class Health(BaseModel):
 def create_app(
     *,
     generator: AnswerGenerator | None = None,
+    verifier: AnswerVerifier | None = None,
     settings: Settings | None = None,
     catalog_loader: Callable[[], Catalog] = load_catalog,
 ) -> FastAPI:
@@ -50,6 +53,13 @@ def create_app(
             base_url=str(settings.ollama_base_url),
             timeout=settings.ollama_timeout,
         )
+        if verifier is None:
+            verifier = partial(
+                verify_with_ollama,
+                (settings.ollama_verifier_model or "").strip() or settings.ollama_model.strip(),
+                base_url=str(settings.ollama_base_url),
+                timeout=settings.ollama_timeout,
+            )
     try:
         release = version("llm-petrovaradinska-tvrdjava")
     except PackageNotFoundError:
@@ -110,7 +120,7 @@ def create_app(
                 headers={"Retry-After": "1"},
             )
         try:
-            return answer_question(request.question, matches, generate)
+            return answer_question(request.question, matches, generate, verifier)
         except ModelUnavailableError as error:
             logger.warning("Ollama generation unavailable", exc_info=error)
             raise HTTPException(status_code=503, detail="Lokalni model je nedostupan.") from error
