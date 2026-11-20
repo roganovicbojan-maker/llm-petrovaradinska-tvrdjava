@@ -12,6 +12,9 @@ class Settings(BaseModel):
     ollama_verifier_model: str | None = None
     ollama_base_url: HttpUrl = HttpUrl("http://127.0.0.1:11434")
     ollama_timeout: float = Field(default=90.0, gt=0, allow_inf_nan=False)
+    embedding_model: str | None = None
+    embedding_timeout: float = Field(default=5.0, gt=0, allow_inf_nan=False)
+    embedding_min_similarity: float = Field(default=0.65, ge=0, le=1)
     requests_per_minute: int = Field(default=120, ge=1)
     max_request_bytes: int = Field(default=4096, ge=1)
     max_concurrent_generations: int = Field(default=1, ge=1)
@@ -40,6 +43,9 @@ class Settings(BaseModel):
             ("ollama_verifier_model", "FORTRESS_OLLAMA_VERIFIER_MODEL"),
             ("ollama_base_url", "FORTRESS_OLLAMA_BASE_URL"),
             ("ollama_timeout", "FORTRESS_OLLAMA_TIMEOUT"),
+            ("embedding_model", "FORTRESS_EMBEDDING_MODEL"),
+            ("embedding_timeout", "FORTRESS_EMBEDDING_TIMEOUT"),
+            ("embedding_min_similarity", "FORTRESS_EMBEDDING_MIN_SIMILARITY"),
             ("requests_per_minute", "FORTRESS_REQUESTS_PER_MINUTE"),
             ("max_request_bytes", "FORTRESS_MAX_REQUEST_BYTES"),
             ("max_concurrent_generations", "FORTRESS_MAX_CONCURRENT_GENERATIONS"),

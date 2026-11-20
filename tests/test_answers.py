@@ -248,6 +248,7 @@ def test_configured_ollama_verifier_is_a_separate_pass(monkeypatch, verdict, exp
             }
         else:
             check = message["checks"][0]
+            assert check["question"] == "Topova 1716"
             assert any("100" in p for p in check["passages"])
             assert all("160" not in p for p in check["passages"])
             response = {"supported": [verdict]}
