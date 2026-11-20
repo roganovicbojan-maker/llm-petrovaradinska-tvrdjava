@@ -24,6 +24,9 @@ validate-catalog = "llm_petrovaradinska_tvrdjava.catalog:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+llm_petrovaradinska_tvrdjava = ["review_data/*.json", "review_data/*.html"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 

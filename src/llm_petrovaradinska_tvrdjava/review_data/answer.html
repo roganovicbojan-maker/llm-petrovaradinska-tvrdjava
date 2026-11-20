@@ -1,0 +1,81 @@
+<section aria-labelledby="answer-title">
+  <h2 id="answer-title">Pitanje o tvrđavi</h2>
+  <form id="answer-form" action="/api/v1/answers" method="post">
+    <label for="answer-question">Postavi pitanje</label><br>
+    <input id="answer-question" name="question" required maxlength="160"
+           placeholder="Šta je predloženo za 1754?">
+    <button>Odgovori iz izvora</button>
+  </form>
+  <p id="answer-status" role="status"></p>
+  <div id="answer-result"></div>
+</section>
+<script>
+  const answerForm = document.getElementById("answer-form");
+  const answerStatus = document.getElementById("answer-status");
+  const answerResult = document.getElementById("answer-result");
+
+  answerForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const question = new FormData(answerForm).get("question").trim();
+    if (!question) {
+      answerStatus.textContent = "Unesi pitanje.";
+      return;
+    }
+    const button = answerForm.querySelector("button");
+    button.disabled = true;
+    answerResult.replaceChildren();
+    answerStatus.textContent = "Tražim izvore i sastavljam odgovor…";
+
+    try {
+      const response = await fetch(answerForm.action, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({question}),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        answerStatus.textContent = typeof data.detail === "string" ? data.detail :
+          "Odgovor trenutno nije dostupan.";
+        return;
+      }
+      if (data.status === "insufficient_evidence") {
+        answerStatus.textContent = "Dostupni dosijei nemaju dovoljno dokaza za odgovor.";
+        return;
+      }
+      answerStatus.textContent = "";
+      const references = new Map(data.references.map(ref => [ref.evidence_id, ref.match]));
+      const list = document.createElement("ul");
+      for (const claim of data.claims) {
+        const item = document.createElement("li");
+        const text = document.createElement("p");
+        text.textContent = claim.text;
+        item.append(text);
+
+        const sources = document.createElement("ul");
+        for (const id of claim.evidence_ids) {
+          const match = references.get(id);
+          const source = document.createElement("li");
+          const link = document.createElement("a");
+          link.href = "/reviews/" + encodeURIComponent(match.dossier_id) + "#" +
+            encodeURIComponent(match.observation.observation_id);
+          link.textContent = match.source.title + " · " + match.observation.citation.locator;
+          source.append(link);
+          if (match.intermediary) {
+            const via = document.createElement("small");
+            via.textContent = "Prema posredniku: " + match.intermediary.title + " · " +
+              match.observation.via.locator;
+            source.append(via);
+          }
+          sources.append(source);
+        }
+        item.append(sources);
+        list.append(item);
+      }
+      answerResult.append(list);
+    } catch {
+      answerStatus.textContent = "Došlo je do greške pri učitavanju odgovora.";
+    } finally {
+      button.disabled = false;
+    }
+  });
+</script>

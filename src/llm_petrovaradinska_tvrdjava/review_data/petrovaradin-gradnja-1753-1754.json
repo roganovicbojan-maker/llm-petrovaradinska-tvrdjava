@@ -1,0 +1,91 @@
+{
+  "dossier_id": "petrovaradin-gradnja-1753-1754",
+  "title": "Gradnja Petrovaradinske tvrđave 1753–1754.",
+  "summary": "Raportni i projektni plan razdvaja radove prijavljene kao izvedene 1753. od radova predloženih za 1754. Na primeru Beogradske kapije vidi se koliko precizno možemo datovati početak i završetak gradnje.",
+  "sources": [
+    {
+      "source_id": "kriegsarchiv-plan-15",
+      "title": "Raportni i projektni plan Petrovaradinske tvrđave 1753–1754.",
+      "tradition": "Habzburška vojna kartografija",
+      "kind": "map",
+      "url": "https://www.archivinformationssystem.at/detail.aspx?ID=2018495"
+    },
+    {
+      "source_id": "sajdl-2023",
+      "title": "Aleksandar Sajdl, Heraldičke predstave na zdanjima Petrovaradinske tvrđave, Zbornik Matice srpske za istoriju 108 (2023)",
+      "tradition": "Istorija arhitekture",
+      "kind": "secondary",
+      "url": "https://doi.org/10.18485/ms_zmsi.2023.108.2"
+    },
+    {
+      "source_id": "bms-pg-iii-16",
+      "title": "Raportni plan građevinskih radova na Petrovaradinskoj tvrđavi 1764–1766.",
+      "tradition": "Habzburška vojna kartografija",
+      "kind": "map"
+    }
+  ],
+  "comparisons": [
+    {
+      "topic": "Izvedeno stanje i predlog radova",
+      "observations": [
+        {
+          "observation_id": "plan-reported-1753",
+          "citation": {
+            "source_id": "kriegsarchiv-plan-15",
+            "locator": "Kriegsarchiv Wien, Inland C VII Peterwardein α, br. 15, naslov plana"
+          },
+          "via": {
+            "source_id": "sajdl-2023",
+            "locator": "Str. 22, fusnota 17, i str. 26, fusnota 39"
+          },
+          "value": "1753. · Radovi prijavljeni kao izvedeni",
+          "context": "Sajdl prenosi naslov izvornog plana. Godina 1753. odnosi se na raport o izvedenim radovima."
+        },
+        {
+          "observation_id": "plan-proposed-1754",
+          "citation": {
+            "source_id": "kriegsarchiv-plan-15",
+            "locator": "Kriegsarchiv Wien, Inland C VII Peterwardein α, br. 15, naslov plana"
+          },
+          "via": {
+            "source_id": "sajdl-2023",
+            "locator": "Str. 22, fusnota 17, i str. 26, fusnota 39"
+          },
+          "value": "1754. · Predloženi radovi",
+          "context": "Godina 1754. u naslovu se odnosi na predlog. Za potvrdu pojedinačnih zahvata potreban je kasniji raport ili drugi dokument o izvođenju."
+        }
+      ]
+    },
+    {
+      "topic": "Datovanje Beogradske kapije",
+      "observations": [
+        {
+          "observation_id": "belgrade-gate-start",
+          "citation": {
+            "source_id": "kriegsarchiv-plan-15",
+            "locator": "Plan 1753/1754, legenda Donje tvrđave, oznaka XL"
+          },
+          "via": {
+            "source_id": "sajdl-2023",
+            "locator": "Str. 29, fusnota 56"
+          },
+          "value": "Zidanje Beogradske kapije započeto je 1753.",
+          "context": "Sajdl prenosi da legenda označava kapiju kao započetu. Boja odgovara zidanju evidentiranom 1753, pa autor dopušta mogućnost da je kapija tada i dovršena."
+        },
+        {
+          "observation_id": "belgrade-gate-later-plan",
+          "citation": {
+            "source_id": "bms-pg-iii-16",
+            "locator": "Biblioteka Matice srpske, Pg III 16, legenda Donje tvrđave, oznaka XII"
+          },
+          "via": {
+            "source_id": "sajdl-2023",
+            "locator": "Str. 29, fusnota 57"
+          },
+          "value": "Na planu 1764–1766. kapija je evidentirana kao postojeća",
+          "context": "Sajdl navodi da je plan svrstava među starije građevine zatečene u dobrom stanju. Tačna godina završetka ostaje otvorena."
+        }
+      ]
+    }
+  ]
+}

@@ -6,7 +6,8 @@ from typing import Annotated, Literal, Self
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, model_validator
 
 Text = Annotated[str, Field(min_length=1)]
-RecordId = Annotated[str, Field(pattern=r"^[a-z0-9]+(?:[-_][a-z0-9]+)*$")]
+RECORD_ID_PATTERN = r"^[a-z0-9]+(?:[-_][a-z0-9]+)*$"
+RecordId = Annotated[str, Field(pattern=RECORD_ID_PATTERN)]
 Confidence = Literal["low", "medium", "high", "unassessed"]
 
 
