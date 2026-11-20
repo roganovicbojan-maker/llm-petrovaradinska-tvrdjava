@@ -2,6 +2,6 @@
 
 Status: prihvaćeno.
 
-Početni katalog je jedan JSON dokument sa `schema_version: 1`. Pydantic i komandni validator proveravaju pojedinačne zapise i veze između njih. Ovaj format omogućava pregled promena u Git-u i jednostavan početak rada. Višekorisničko uređivanje bi zahtevalo kasnije skladište i istoriju izmena.
+Početni katalog uveden je kao jedan JSON dokument sa `schema_version: 1`. Od verzije 2 katalog koristi listu dokaza sa ulogama i graf deklarisanog porekla izvora. Pravila i prelazak opisani su u [README-u kataloga](../../data/catalog/README.md).
 
 Operativni `/health` ostaje izvan verzionisanog javnog API-ja. Javni ugovor počinje od `/api/v1`, a verzija paketa i revizija šeme kataloga imaju zasebne namene.
