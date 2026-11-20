@@ -1,0 +1,81 @@
+{
+  "dossier_id": "petrovaradin-samostan-sv-franje",
+  "title": "Samostan Sv. Franje i vojna bolnica u Petrovaradinu",
+  "summary": "Dosije prati faznu izgradnju baroknog sklopa u Donjem gradu i dokumentuje da su samostan i crkva menjali namenu u različito vreme.",
+  "sources": [
+    {
+      "source_id": "matos-1987",
+      "title": "Jerko Matoš, Samostan sv. Franje u Petrovarađinu, Peristil 30 (1987)",
+      "tradition": "Istorija arhitekture i arhivska istraživanja",
+      "kind": "secondary",
+      "url": "https://hrcak.srce.hr/file/243996"
+    },
+    {
+      "source_id": "menguzzi-1769",
+      "title": "F. Mengucci de Rossi, prikaz Petrovaradinske tvrđave sa juga, 1769.",
+      "tradition": "Istorijska kartografija, Nacionalna biblioteka u Beču",
+      "kind": "map"
+    }
+  ],
+  "comparisons": [
+    {
+      "topic": "Izgradnja i prikaz Donjeg grada",
+      "observations": [
+        {
+          "observation_id": "franjevci-faze-gradnje",
+          "citation": {
+            "source_id": "matos-1987",
+            "locator": "Str. 109, sažetak"
+          },
+          "value": "Barokni samostanski sklop građen je u fazama od 1699. do 1772.",
+          "context": "Raspon se odnosi na sklop, pa se iz njega ne izvodi precizni datum svake zgrade."
+        },
+        {
+          "observation_id": "franjevci-pogled-1769",
+          "citation": {
+            "source_id": "menguzzi-1769",
+            "locator": "Prikaz tvrđave sa južne strane, 1769."
+          },
+          "value": "Izgled tvrđave prikazan je iz južnog pravca 1769.",
+          "context": "Južni pogled dokumentuje odabrani prikaz lokaliteta. Za datovanje pojedinačnih delova potreban je dodatni izvor.",
+          "via": {
+            "source_id": "matos-1987",
+            "locator": "Str. 110, sl. 1"
+          }
+        }
+      ]
+    },
+    {
+      "topic": "Prenamena samostana i crkve",
+      "observations": [
+        {
+          "observation_id": "franjevci-bolnica-1783",
+          "citation": {
+            "source_id": "matos-1987",
+            "locator": "Str. 111, uvodni pasus"
+          },
+          "value": "Smeštanje vojne bolnice u samostan počelo je 1783.",
+          "context": "Matoš razlikuje početak smeštanja bolnice od kasnijeg iseljenja fratara."
+        },
+        {
+          "observation_id": "franjevci-ukidanje-1786",
+          "citation": {
+            "source_id": "matos-1987",
+            "locator": "Str. 109, sažetak"
+          },
+          "value": "Josip II ukinuo je samostan 1786.",
+          "context": "Godina se odnosi na ukidanje samostana."
+        },
+        {
+          "observation_id": "franjevci-crkva-1808",
+          "citation": {
+            "source_id": "matos-1987",
+            "locator": "Str. 109, sažetak"
+          },
+          "value": "Crkva je 1808. izgubila sakralnu funkciju i prenamenjena je za Slavonsku generalnu komandu.",
+          "context": "Namena crkve se razmatra zasebno od ranijeg smeštanja bolnice u samostan."
+        }
+      ]
+    }
+  ]
+}

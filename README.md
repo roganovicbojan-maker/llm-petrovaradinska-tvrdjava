@@ -24,13 +24,13 @@ Ako `.env` već postoji, preskočite kopiranje. U drugom PowerShell prozoru pokr
 
 ## Demo za portfolio
 
-Otvorite **/reviews/petrovaradin-1716** nakon pokretanja aplikacije. Dosije prikazuje
-datum i mesto iz srpske, turske i mađarske literature, a procene artiljerije
-prikazuje po izvoru, uz lokator, posrednika i stanje uredničke provere.
-Strukturirani podaci su dostupni na **/api/v1/reviews/petrovaradin-1716**.
+**Portfolio overview (EN)**
 
-> A source review tool for comparing historical accounts, tracing citations to
-> their origins, and preserving conflicting figures with their context.
+A Python/FastAPI prototype for historical research. The review interface lets readers compare
+evidence, inspect source locators, and distinguish original sources from later editions or
+translations. The optional Ollama integration retrieves evidence from five curated dossiers,
+sends it to a local model, and validates the structure and evidence IDs of the output. The review
+pages and automated tests run without a model.
 
 U PyCharm terminalu koji koristi Git Bash, iz korena repozitorijuma:
 
@@ -38,13 +38,19 @@ U PyCharm terminalu koji koristi Git Bash, iz korena repozitorijuma:
 ./.venv/Scripts/python.exe -m uvicorn llm_petrovaradinska_tvrdjava.api:app --host 127.0.0.1 --port 8000
 ```
 
-Otvorite [dosije o bici 1716.](http://127.0.0.1:8000/reviews/petrovaradin-1716).
+Otvorite [pregled i pretragu dosijea](http://127.0.0.1:8000/reviews).
 
-Otvorite [pregled i pretragu dosijea](http://127.0.0.1:8000/reviews). Pored bitke,
-pregled sadrži dosije o [gradnji tvrđave 1753–1754.](http://127.0.0.1:8000/reviews/petrovaradin-gradnja-1753-1754).
-Pretraga vraća navode sa lokatorima i posrednim izvorima. Isti rezultati su
-dostupni preko `GET /api/v1/review-search?q=...`. Pretraga je leksička i
-predstavlja osnovu za kasnije generisanje odgovora iz pronađene građe.
+| Dosije | Šta se može proveriti |
+| --- | --- |
+| [Paleolitski nalazi](http://127.0.0.1:8000/reviews/petrovaradin-paleolit) | Datovanje slojeva i granice zaključaka o kontinuitetu naseljavanja. |
+| [Opsada 1694.](http://127.0.0.1:8000/reviews/petrovaradin-opsada-1694) | Habzburški plan, izdanje osmanske hronike i mađarski dnevnik preko prevoda. |
+| [Bitka 1716.](http://127.0.0.1:8000/reviews/petrovaradin-1716) | Datum i mesto bitke i različite procene artiljerije. |
+| [Gradnja 1753–1754.](http://127.0.0.1:8000/reviews/petrovaradin-gradnja-1753-1754) | Izvedeni i predloženi radovi i datovanje Beogradske kapije. |
+| [Samostan Sv. Franje i vojna bolnica](http://127.0.0.1:8000/reviews/petrovaradin-samostan-sv-franje) | Faze gradnje i prenamena samostana i crkve. |
+
+Leksička pretraga vraća navode sa lokatorima i posrednim izvorima preko
+`GET /api/v1/review-search?q=...`. Strukturirani dosije je dostupan preko
+`GET /api/v1/reviews/{dossier_id}`.
 
 ### RAG odgovori uz lokalni model
 
@@ -67,10 +73,13 @@ Umesto `export` možete upisati `FORTRESS_OLLAMA_MODEL=qwen3:4b` u `.env`.
 Ollama mora da sluša na `127.0.0.1:11434`. JSON API prihvata
 `POST /api/v1/answers` sa telom `{"question":"Šta je predloženo za 1754?"}`.
 
-Predložena demo pitanja:
+Predložena demo pitanja
 
-- Šta je predloženo za 1754?
+- Kako je datovan paleolitski sloj 2b?
+- Koji vremenski raspon nosi karta opsade 1694?
 - Koje procene broja topova postoje za 1716?
+- Šta je predloženo za 1754?
+- Kada je vojna bolnica smeštena u samostan?
 - Koliko je bilo stanovnika u Vinči 2024?
 
 ### Urednička provera

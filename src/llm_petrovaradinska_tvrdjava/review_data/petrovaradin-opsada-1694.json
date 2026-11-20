@@ -1,0 +1,72 @@
+{
+  "dossier_id": "petrovaradin-opsada-1694",
+  "title": "Opsada Petrovaradina 1694.",
+  "summary": "Osmanska hronika, habzburški plan i dnevnik Imrea Thökölyja beleže opsadu iz različitih položaja. Datumski raspon na karti, procena trajanja i dnevnički zapis čitaju se u kontekstu njihovog obuhvata.",
+  "sources": [
+    {
+      "source_id": "oruc-2021",
+      "title": "Hatice Oruç, Târîh-i Varadin Der Zemân-ı Sultân Ahmed Bin İbrahim, Belgeler 36(40), 51–190 (2021)",
+      "tradition": "Tursko kritičko izdanje osmanske hronike",
+      "kind": "secondary",
+      "url": "https://doi.org/10.37879/belgeler.2021.51"
+    },
+    {
+      "source_id": "rct-rcin-724066",
+      "title": "I. G. Hanspersky de Fanal, plan Peterwardeina (1694), Royal Collection Trust, RCIN 724066",
+      "tradition": "Habzburška vojna kartografija",
+      "kind": "map",
+      "url": "https://militarymaps.rct.uk/other-17th-century-conflicts/map-of-peterwardein-1694-petrovaradin-serbia-45deg1448n-19deg5246e"
+    },
+    {
+      "source_id": "thokoly-dnevnik-1694",
+      "title": "Imre Thököly, dnevnik pohoda 1694.",
+      "tradition": "Mađarski učesnik u pohodu na osmanskoj strani",
+      "kind": "primary"
+    },
+    {
+      "source_id": "sevket-capraz-2010",
+      "title": "Hüseyin Şevket i Çağatay Çapraz, İmre Thököly Gözüyle Osmanlı İmparatorluğu’nun 1694 Petrovaradin Kuşatması, Gazi Akademik Bakış 3(6) (2010)",
+      "tradition": "Turski prevod i studija mađarskog dnevnika",
+      "kind": "secondary",
+      "url": "https://dergipark.org.tr/tr/download/article-file/73979"
+    }
+  ],
+  "comparisons": [
+    {
+      "topic": "Vremenski obuhvat i perspektive opsade 1694.",
+      "observations": [
+        {
+          "observation_id": "opsada-1694-oruc-trajanje",
+          "citation": {
+            "source_id": "oruc-2021",
+            "locator": "Sažetak izdanja, uvodni pasus"
+          },
+          "value": "Oruç navodi da je opsada trajala 23 dana.",
+          "context": "Izdanje se zasniva na anonimnoj osmanskoj hronici. Broj je ovde preuzet iz sažetka priređivača."
+        },
+        {
+          "observation_id": "opsada-1694-karta-raspon",
+          "citation": {
+            "source_id": "rct-rcin-724066",
+            "locator": "RCIN 724066, transkripcija rukopisnog naslova"
+          },
+          "value": "U naslovu plana stoji raspon 9–22. septembar 1694.",
+          "context": "Datumi određuju šta naslov karte predstavlja. Sami po sebi nisu mera ukupnog trajanja opsade."
+        },
+        {
+          "observation_id": "opsada-1694-thokoly-septembar",
+          "citation": {
+            "source_id": "thokoly-dnevnik-1694",
+            "locator": "Dnevnički unos za 30. septembar 1694."
+          },
+          "value": "Thököly beleži da je od glasnika dobio vesti o borbama.",
+          "context": "Učesnik ovde prenosi primljenu vest. Datum se odnosi na unos u dnevnik.",
+          "via": {
+            "source_id": "sevket-capraz-2010",
+            "locator": "Unos Perşembe 30, septembar, str. 167"
+          }
+        }
+      ]
+    }
+  ]
+}

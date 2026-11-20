@@ -101,3 +101,34 @@ def test_construction_dossier_and_search_share_the_public_review_routes() -> Non
     assert f"/reviews/{dossier_id}#belgrade-gate-start" in html.text
     assert battle.json()[0]["dossier_id"] == "petrovaradin-1716"
     assert missing.json() == []
+
+
+@pytest.mark.parametrize(
+    ("dossier_id", "question", "observation_id"),
+    [
+        ("petrovaradin-paleolit", "90.000 godina 2b", "paleolit-2b-90ka"),
+        ("petrovaradin-opsada-1694", "karta opsade 1694", "opsada-1694-karta-raspon"),
+        (
+            "petrovaradin-samostan-sv-franje",
+            "vojna bolnica 1783",
+            "franjevci-bolnica-1783",
+        ),
+    ],
+)
+def test_additional_dossiers_link_to_searchable_evidence(
+    dossier_id: str, question: str, observation_id: str
+) -> None:
+    with TestClient(app) as client:
+        index = client.get("/reviews")
+        page = client.get(f"/reviews/{dossier_id}")
+        response = client.get("/api/v1/review-search", params={"q": question})
+
+    assert index.status_code == page.status_code == response.status_code == 200
+    assert f"/reviews/{dossier_id}" in index.text
+    assert f'id="{observation_id}"' in page.text
+    hit = next(
+        item for item in response.json() if item["observation"]["observation_id"] == observation_id
+    )
+    assert hit["dossier_id"] == dossier_id
+    assert hit["source"]["url"]
+    assert hit["observation"]["citation"]["locator"]
