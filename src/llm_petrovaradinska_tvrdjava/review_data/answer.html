@@ -1,5 +1,7 @@
 <section aria-labelledby="answer-title">
   <h2 id="answer-title">Pitanje o tvrđavi</h2>
+  <p>AI odgovor je generisan. Automatska provera povezuje citate sa pronađenim zapisima
+    i proverava brojeve. Za istorijsku ocenu pogledaj stručnu proveru u dosijeu.</p>
   <form id="answer-form" action="/api/v1/answers" method="post">
     <label for="answer-question">Postavi pitanje</label><br>
     <input id="answer-question" name="question" required maxlength="160"
@@ -42,7 +44,7 @@
         answerStatus.textContent = "Dostupni dosijei nemaju dovoljno dokaza za odgovor.";
         return;
       }
-      answerStatus.textContent = "";
+      answerStatus.textContent = "Generisan odgovor · strukturna provera citata i brojeva";
       const references = new Map(data.references.map(ref => [ref.evidence_id, ref.match]));
       const list = document.createElement("ul");
       for (const claim of data.claims) {
@@ -60,6 +62,18 @@
             encodeURIComponent(match.observation.observation_id);
           link.textContent = match.source.title + " · " + match.observation.citation.locator;
           source.append(link);
+          const status = document.createElement("small");
+          status.textContent = match.observation.expert_review
+            ? "Stručna provera navoda: " + match.observation.expert_review.checked_on
+            : "Navod nema evidentiranu stručnu proveru.";
+          source.append(status);
+          for (const evidence of match.observation.evidence) {
+            const entry = document.createElement("small");
+            const labels = {supports: "Potkrepljuje", contradicts: "Protivreči", context: "Kontekst"};
+            entry.textContent = labels[evidence.role] + " · " + evidence.source.title
+              + " · " + evidence.locator;
+            source.append(entry);
+          }
           if (match.intermediary) {
             const via = document.createElement("small");
             via.textContent = "Prema posredniku: " + match.intermediary.title + " · " +

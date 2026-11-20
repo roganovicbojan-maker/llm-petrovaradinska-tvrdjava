@@ -55,6 +55,7 @@ class AnswerResult(Record):
     status: Literal["answered", "insufficient_evidence"]
     claims: list[AnswerClaim] = Field(default_factory=list)
     references: list[AnswerReference] = Field(default_factory=list)
+    verification: Literal["structural_only"] | None = None
 
 
 AnswerGenerator = Callable[[str, list[AnswerReference]], DraftAnswer]
@@ -94,6 +95,7 @@ def answer_question(
 
     return AnswerResult(
         status="answered",
+        verification="structural_only",
         claims=draft.claims,
         references=[reference for reference in references if reference.evidence_id in cited],
     )
@@ -112,6 +114,17 @@ def generate_with_ollama(
             "source": reference.match.source.title,
             "locator": reference.match.observation.citation.locator,
             "via": reference.match.intermediary.title if reference.match.intermediary else None,
+            "status": reference.match.observation.status,
+            "evidence": [
+                {
+                    "role": item.role,
+                    "passage": item.passage,
+                    "source": item.source.title,
+                    "locator": item.locator,
+                    "via": item.intermediary.title if item.intermediary else None,
+                }
+                for item in reference.match.observation.evidence
+            ],
         }
         for reference in references
     ]

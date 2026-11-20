@@ -13,6 +13,7 @@ Text = Annotated[str, Field(min_length=1)]
 RECORD_ID_PATTERN = r"^[a-z0-9]+(?:[-_][a-z0-9]+)*$"
 RecordId = Annotated[str, Field(pattern=RECORD_ID_PATTERN)]
 Confidence = Literal["low", "medium", "high", "unassessed"]
+ClaimStatus = Literal["confirmed", "probable", "disputed", "refuted", "unknown"]
 NonnegativeDecimal = Annotated[Decimal, Field(ge=0, allow_inf_nan=False)]
 QUOTATION_WORD_LIMIT = 15
 WORD_PATTERN = re.compile(r"[^\W_]+(?:[’'][^\W_]+)*")
@@ -102,6 +103,24 @@ class TemporalInterval(Record):
                 date.fromisoformat(boundary + suffix)
         if self.iso_start and self.iso_end and self.iso_start > self.iso_end:
             raise ValueError("Normalized boundaries must be ordered chronologically")
+        if self.calendar == "gregorian":
+            for year, boundary in (
+                (self.start_year, self.iso_start),
+                (self.end_year, self.iso_end),
+            ):
+                if year is not None and boundary is not None and year != int(boundary[:4]):
+                    raise ValueError("Gregorian year does not match normalized boundary")
+            if (
+                self.original_expression is not None
+                and not self.approximate
+                and re.fullmatch(patterns[self.precision], self.original_expression)
+                and not all(
+                    boundary == self.original_expression
+                    for boundary in (self.iso_start, self.iso_end)
+                    if boundary is not None
+                )
+            ):
+                raise ValueError("Gregorian original expression does not match normalized date")
         return self
 
 
@@ -191,10 +210,17 @@ class Evidence(Record):
     source_id: RecordId
     locator_kind: Literal["page", "folio", "archival_unit", "section", "other", "unavailable"]
     locator: Text
+    locator_unavailable_reason: Text | None = None
     passage_kind: Literal["quotation", "paraphrase"]
     passage: Text
     passage_language: LanguageTag | None = None
     transcription: Literal["original_checked", "unverified_ocr", "unverified"]
+
+    @model_validator(mode="after")
+    def check_locator(self) -> Self:
+        if self.locator_kind == "unavailable" and not self.locator_unavailable_reason:
+            raise ValueError("Explain why the locator is unavailable")
+        return self
 
 
 class Citation(Record):
@@ -246,7 +272,7 @@ class Claim(Record):
     dating: DatingInfo | None = None
     location: Place
     evidence: Annotated[list[EvidenceLink], Field(min_length=1)]
-    status: Literal["confirmed", "probable", "disputed", "refuted", "unknown"]
+    status: ClaimStatus
     confidence: Confidence = "unassessed"
     disagreement_notes: Text | None = None
     review: Review | None = None
@@ -306,12 +332,14 @@ class Catalog(Record):
 
         graph = TopologicalSorter({key: source.derived_from for key, source in sources.items()})
         roots: dict[str, set[str]] = {}
+        ancestors: dict[str, set[str]] = {}
         try:
             for key in graph.static_order():
                 parents = sources[key].derived_from
                 roots[key] = (
                     set().union(*(roots[parent] for parent in parents)) if parents else {key}
                 )
+                ancestors[key] = set(parents).union(*(ancestors[parent] for parent in parents))
         except CycleError as exc:
             chain = " -> ".join(exc.args[1])
             raise ValueError(f"Source provenance cycle: {chain}") from exc
@@ -330,6 +358,10 @@ class Catalog(Record):
                         raise ValueError(f"{context}: Unknown intermediary")
                     if passage.via.source_id == passage.source_id:
                         raise ValueError(f"{context}: a source cannot be its own intermediary")
+                    if passage.source_id not in ancestors[passage.via.source_id]:
+                        raise ValueError(f"{context}: Undocumented intermediary chain")
+                    if sources[passage.via.source_id].use == "discovery_only":
+                        raise ValueError(f"{context}: discovery-only intermediary")
                 if claim.status != "unknown" and passage.transcription != "original_checked":
                     raise ValueError(f"{context}: assessed claims require checked passages")
                 if (

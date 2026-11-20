@@ -2,12 +2,14 @@ import json
 from functools import partial
 
 import httpx
+import pytest
 from fastapi.testclient import TestClient
 
 from llm_petrovaradinska_tvrdjava import answers
 from llm_petrovaradinska_tvrdjava.answers import AnswerClaim, AnswerReference, DraftAnswer
 from llm_petrovaradinska_tvrdjava.api import create_app
 from llm_petrovaradinska_tvrdjava.reviews import load_dossiers, search_dossiers
+from llm_petrovaradinska_tvrdjava.settings import Settings
 
 CONSTRUCTION_QUESTION = "Шта је предложено за 1754?"
 
@@ -27,10 +29,52 @@ def test_cyrillic_question_returns_claim_and_resolved_citation() -> None:
     assert response.status_code == 200
     body = response.json()
     assert body["status"] == "answered"
+    assert body["verification"] == "structural_only"
     assert body["claims"][0]["evidence_ids"] == [1]
     assert len(body["references"]) == 1
     assert body["references"][0]["match"]["observation"]["via"]["source_id"] == "sajdl-2023"
     assert 'action="/api/v1/answers"' in page.text
+    assert "AI odgovor je generisan" in page.text
+
+
+@pytest.mark.parametrize(
+    ("failure", "expected"),
+    [
+        ("connect", 503),
+        ("timeout", 503),
+        ("server-error", 503),
+        ("not-json", 502),
+        ("bad-structure", 502),
+        ("oversize", 502),
+    ],
+)
+def test_ollama_failure_is_mapped_to_public_status(
+    monkeypatch: pytest.MonkeyPatch, failure: str, expected: int
+) -> None:
+    def handle(request: httpx.Request) -> httpx.Response:
+        if failure == "connect":
+            raise httpx.ConnectError("unavailable", request=request)
+        if failure == "timeout":
+            raise httpx.ReadTimeout("timeout", request=request)
+        if failure == "server-error":
+            return httpx.Response(500)
+        if failure == "not-json":
+            return httpx.Response(200, content=b"{")
+        if failure == "bad-structure":
+            return httpx.Response(200, json={"message": {"content": "{}"}})
+        return httpx.Response(200, content=b" " * (answers.MAX_MODEL_RESPONSE + 1))
+
+    original = httpx.Client
+    monkeypatch.setattr(
+        answers.httpx,
+        "Client",
+        partial(original, transport=httpx.MockTransport(handle)),
+    )
+    with TestClient(create_app(settings=Settings(ollama_model="test"))) as client:
+        response = client.post("/api/v1/answers", json={"question": "Topova 1716"})
+        assert response.status_code == expected
+        assert response.json()["detail"]
+        assert client.get("/ready").status_code == 200
 
 
 def test_empty_retrieval_skips_model() -> None:

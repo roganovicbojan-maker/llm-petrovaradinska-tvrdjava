@@ -278,3 +278,24 @@ def test_source_provenance_rejects_unknown_parents_and_cycles(source: Source) ->
     cyclic = source.model_copy(update={"derived_from": [other.source_id]})
     with pytest.raises(ValidationError, match="provenance cycle"):
         Catalog(schema_version=2, sources=[cyclic, other], claims=[])
+
+
+def test_unavailable_locator_requires_reason(claim: Claim) -> None:
+    payload = claim.evidence[0].model_dump()
+    payload["locator_kind"] = "unavailable"
+    with pytest.raises(ValidationError, match="Explain why the locator is unavailable"):
+        EvidenceLink.model_validate(payload)
+    payload["locator_unavailable_reason"] = "Catalog scan has no folio numbers."
+    assert EvidenceLink.model_validate(payload).locator_unavailable_reason
+
+
+def test_gregorian_normalization_must_match_structured_input() -> None:
+    with pytest.raises(ValidationError, match="year does not match"):
+        TemporalInterval(calendar="gregorian", start_year=1694, iso_start="1695", precision="year")
+    with pytest.raises(ValidationError, match="original expression does not match"):
+        TemporalInterval(
+            calendar="gregorian",
+            original_expression="1694-09-22",
+            iso_start="1694-09-23",
+            precision="day",
+        )

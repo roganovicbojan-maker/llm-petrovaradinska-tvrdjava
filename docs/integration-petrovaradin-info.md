@@ -6,4 +6,4 @@
 - **Stručna provera.** Administrativni interfejs bi omogućio urednicima pregled odlomaka, ocenu tvrdnji i beleženje potpisa, datuma i istorije izmena. Uredničke operacije zahtevaju autentifikaciju i odgovarajuću ulogu.
 - **Keširanje i zaštita.** Keš treba vezati za jezik, pismo, verziju korpusa i ugovora odgovora. Ograničiti učestalost zahteva, dužinu ulaza i trošak generisanja. Čuvati ključeve na serveru i tretirati tekst iz izvora kao podatke i kada sadrži uputstva. Ograničiti pristup sadržaju i logovima prema pravima i nameni.
 
-Ovo je predlog ugovora za kasniju integraciju. Početno izdanje izlaže samo `GET /health`.
+Ovo su smernice za buduću integraciju. Implementirane rute i uslovi za javno pokretanje navedeni su u [arhitekturi](architecture.md).
