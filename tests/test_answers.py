@@ -40,7 +40,7 @@ def test_cyrillic_question_returns_claim_and_resolved_citation() -> None:
     assert len(body["references"]) == 1
     assert body["references"][0]["match"]["observation"]["via"]["source_id"] == "sajdl-2023"
     assert 'action="/api/v1/answers"' in page.text
-    assert "AI odgovor je generisan" in page.text
+    assert "AI-generated answers" in page.text
 
 
 @pytest.mark.parametrize(

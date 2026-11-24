@@ -96,11 +96,11 @@ def create_app(
 
     def get_dossiers() -> list[Dossier]:
         if not cached:
-            raise HTTPException(status_code=503, detail="Katalog nije spreman.")
+            raise HTTPException(status_code=503, detail="The catalog is not ready.")
         return cached
 
     app = FastAPI(
-        title="LLM Petrovaradinska tvrđava",
+        title="Petrovaradin Fortress LLM",
         version=release,
         debug=settings.debug,
         lifespan=lifespan,
@@ -134,11 +134,11 @@ def create_app(
         if not matches and index is None:
             return AnswerResult(status="insufficient_evidence")
         if generate is None:
-            raise HTTPException(status_code=503, detail="Podesi lokalni Ollama model u .env.")
+            raise HTTPException(status_code=503, detail="Configure a local Ollama model in .env.")
         if not slots.acquire(blocking=False):
             raise HTTPException(
                 status_code=503,
-                detail="Model je zauzet. Pokušaj kasnije.",
+                detail="The model is busy. Try again later.",
                 headers={"Retry-After": "1"},
             )
         try:
@@ -154,10 +154,14 @@ def create_app(
             return answer_question(request.question, matches, generate, verifier)
         except ModelUnavailableError as error:
             logger.warning("Ollama generation unavailable", exc_info=error)
-            raise HTTPException(status_code=503, detail="Lokalni model je nedostupan.") from error
+            raise HTTPException(
+                status_code=503, detail="The local model is unavailable."
+            ) from error
         except InvalidAnswerError as error:
             logger.warning("Ollama answer rejected")
-            raise HTTPException(status_code=502, detail="Provera citata nije prošla.") from error
+            raise HTTPException(
+                status_code=502, detail="Citation or evidence validation failed."
+            ) from error
         finally:
             slots.release()
 

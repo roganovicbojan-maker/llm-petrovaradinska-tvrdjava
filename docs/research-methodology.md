@@ -1,17 +1,17 @@
-# Istraživačka metodologija
+# Research methodology
 
-- Formulišite usku tvrdnju i vežite je za izvor, izdanje i stranicu, folio, arhivsku jedinicu ili drugi precizan lokator. Ako lokator ne postoji, to eksplicitno zabeležite i navedite razlog.
-- Kod primarnog izvora zabeležite autora, položaj, interes i vremensku udaljenost od događaja. Označite strane koje izvor predstavlja i proverite da li navodno nezavisni izvori prenose isti prvobitni iskaz.
-- Kategorizujte naučne radove, arhivsku građu, karte, materijalne nalaze i usmenu istoriju. Wikipediju, turističke stranice i nepotpisane tekstove bez izvora označite kao tragove za dalje istraživanje.
-- Čuvajte originalni jezik, pismo, naziv mesta i savremeni naziv. Odvojite vreme događaja, nastanka dokumenta i izdanja ili prevoda. Zapišite originalni oblik datuma i kalendar. Konverziju dokumentujte uz podatak o korišćenom postupku.
-- Obeležite neproveren OCR i proverite odlomak u originalu pre stručne ocene tvrdnje. Citat i parafrazu označite zasebno. Kod prevoda zabeležite izdanje i jezik citata.
-- Svaku brojčanu procenu sačuvajte kao posebnu tvrdnju. Zapišite ko je brojan, koje kategorije su obuhvaćene i na koji se period i prostor odnosi procena. Prikažite procene uz njihove izvore i razloge neslaganja.
-- Upišite datum provere, ime stručnog recenzenta, procenu pouzdanosti i obrazloženje neslaganja. Prava pristupa lokalnoj kopiji i prava javnog objavljivanja proveravaju se zasebno.
+- Write a narrow claim and cite the source, edition, and a page, folio, archival unit, or equivalent locator. Record the reason if a locator is unavailable.
+- For primary sources, record the author, position, interests, and distance in time from the event. Record the perspectives represented and check whether apparently independent sources repeat the same account.
+- Distinguish research publications, archival records, maps, material finds, and oral history. Treat Wikipedia, tourist material, and unsigned pages without sources as discovery leads.
+- Preserve the original language, script, and place name alongside its modern name. Record the event date, document date, and edition or translation date separately. Preserve the original date expression and calendar, and document any conversion.
+- Mark unverified OCR and check passages against the original before expert assessment. Distinguish quotation from paraphrase and record the edition and language of translations.
+- Record each numerical estimate separately, including the counted population, categories, time period, and geographic scope. Present each estimate with its source and any documented reasons for disagreement.
+- Record the reviewer's name, review date, confidence, and reasons for disagreement. Assess whether a copy was lawfully obtained and whether it may be published.
 
-## Početni dosijei
+## Initial dossiers
 
-| Dosije | Šta proveriti | Kako evidentirati |
+| Dossier | Research questions | How to record evidence |
 | --- | --- | --- |
-| Paleolitsko prisustvo | Naći publikaciju i kontekst datovanja od približno 90.000 godina koji se navodi u istraživačkom pitanju. Posebno proveriti šta nalaz dokazuje o prisustvu i šta građa govori o kontinuitetu. | Po nalazu čuvati kontekst, metod datovanja, raspon i oznaku kalendara ili skale. Tvrdnju o kontinuitetu voditi zasebno. |
-| Opsada 1694. | Istražiti osmanske i habzburško-mađarske izvore i uporediti opise toka i ishoda. | Svaki iskaz vezati za autora, tradiciju, položaj i odgovarajući odlomak u izvoru. |
-| Bitka 1716. | Istražiti habzburške izveštaje, osmansku dokumentaciju, neposredne svedoke i kasniju istoriografiju. Posebno proveriti definicije gubitaka. | Čuvati odvojene procene. Razlikovati poginule, ranjene, nestale i ukupne gubitke kad izvor pruža te podatke. |
+| Palaeolithic presence | Locate the publication and context for the approximately 90,000-year date. Assess what the finds establish about human presence and continuity. | Record find context, dating method, range, and calendar or timescale. Record continuity as a separate claim. |
+| Siege of 1694 | Compare Ottoman and Habsburg-Hungarian accounts of the siege and its outcome. | Record the author, historical perspective, position, and passage for each account. |
+| Battle of 1716 | Compare Habsburg reports, Ottoman documents, eyewitnesses, and later scholarship. Check how each source defines losses. | Preserve separate estimates. Distinguish killed, wounded, missing, and total losses where the source provides those categories. |

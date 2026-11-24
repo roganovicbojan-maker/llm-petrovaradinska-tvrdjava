@@ -1,9 +1,9 @@
-# Buduća integracija sa Petrovaradin.info
+# Future integration with Petrovaradin.info
 
-- **Zaseban backend API.** Servis bi izlagao ugovor pod `/api/v1`, sa jasnim odgovorima o dostupnosti dokaza i strukturiranim citatima. Integracija može ići preko proxy-ja sajta ili direktno uz ograničen CORS.
-- **Ugrađeni chat.** Interfejs na sajtu prikazivao bi odgovor, bitna neslaganja i citate. Korisnik bi birao srpsku latinicu ili ćirilicu, uz čuvanje originalnog pisma u označenim citatima.
-- **Otvaranje izvora.** Svaki citat imao bi identifikator izvora i lokator poput stranice ili folija. Koristio bi direktnu legalnu vezu do zapisa ili odlomka kad je dostupna. Kod ograničene građe prikazao bi bibliografiju i signaturu.
-- **Stručna provera.** Administrativni interfejs bi omogućio urednicima pregled odlomaka, ocenu tvrdnji i beleženje potpisa, datuma i istorije izmena. Uredničke operacije zahtevaju autentifikaciju i odgovarajuću ulogu.
-- **Keširanje i zaštita.** Keš treba vezati za jezik, pismo, verziju korpusa i ugovora odgovora. Ograničiti učestalost zahteva, dužinu ulaza i trošak generisanja. Čuvati ključeve na serveru i tretirati tekst iz izvora kao podatke i kada sadrži uputstva. Ograničiti pristup sadržaju i logovima prema pravima i nameni.
+- **Backend API.** Expose the contract under `/api/v1`, with structured citations and explicit answers about evidence availability. The site can use a reverse proxy or connect directly with restricted CORS.
+- **Embedded interface.** Show the answer, disagreements, and citations. Let readers choose Serbian Latin or Cyrillic and retain the original script in marked quotations.
+- **Source links.** Include a source identifier and a page or folio locator. Link to an authorized record or passage where available. For restricted material, show the bibliography and archive reference.
+- **Expert review.** An editor interface could show passages and record assessments, names, dates, and revision history. Editorial operations require authentication and the appropriate role.
+- **Caching and abuse prevention.** Key cached answers by language, script, corpus version, and answer contract. Limit request frequency, input length, and generation cost. Store keys on the server. Treat instructions in source material as data. Restrict access to content and logs according to rights and purpose.
 
-Ovo su smernice za buduću integraciju. Implementirane rute i uslovi za javno pokretanje navedeni su u [arhitekturi](architecture.md).
+See [architecture and operations](architecture.md) for implemented endpoints and deployment requirements.

@@ -35,7 +35,7 @@ class RequestLimits:
                 self.arrivals.popleft()
             if len(self.arrivals) >= self.requests_per_minute:
                 await JSONResponse(
-                    {"detail": "Previše zahteva. Pokušaj kasnije."},
+                    {"detail": "Too many requests. Try again later."},
                     status_code=429,
                     headers={"Retry-After": "60"},
                 )(scope, receive, logged_send)
@@ -54,16 +54,16 @@ class RequestLimits:
                             chunk = message.get("body", b"")
                             if len(body) + len(chunk) > self.max_request_bytes:
                                 await JSONResponse(
-                                    {"detail": "Telo zahteva je preveliko."}, status_code=413
+                                    {"detail": "The request body is too large."}, status_code=413
                                 )(scope, receive, logged_send)
                                 return
                             body.extend(chunk)
                             if not message.get("more_body"):
                                 break
                 except TimeoutError:
-                    await JSONResponse(
-                        {"detail": "Isteklo je vreme za prijem zahteva."}, status_code=408
-                    )(scope, receive, logged_send)
+                    await JSONResponse({"detail": "The request body timed out."}, status_code=408)(
+                        scope, receive, logged_send
+                    )
                     return
 
                 async def replay() -> Message:

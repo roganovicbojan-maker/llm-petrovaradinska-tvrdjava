@@ -5,22 +5,22 @@ from string import Template
 from .models import Citation
 from .reviews import Dossier, DossierSource, Observation, ReviewMatch
 
-KIND_LABEL = {"primary": "Primarni izvor", "secondary": "Sekundarni izvor", "map": "Karta"}
-VERDICT_LABEL = {"verified": "Proveren navod", "needs_context": "Potreban kontekst"}
+KIND_LABEL = {"primary": "Primary source", "secondary": "Secondary source", "map": "Map"}
+VERDICT_LABEL = {"verified": "Reviewed observation", "needs_context": "Context needed"}
 STATUS_LABEL = {
-    "confirmed": "Potvrđeno",
-    "probable": "Verovatno",
-    "disputed": "Sporno",
-    "refuted": "Opovrgnuto",
-    "unknown": "Nepoznato",
+    "confirmed": "Confirmed",
+    "probable": "Probable",
+    "disputed": "Disputed",
+    "refuted": "Refuted",
+    "unknown": "Unknown",
 }
 CONFIDENCE_LABEL = {
-    "low": "niska",
-    "medium": "srednja",
-    "high": "visoka",
-    "unassessed": "neprocenjena",
+    "low": "low",
+    "medium": "medium",
+    "high": "high",
+    "unassessed": "unassessed",
 }
-ROLE_LABEL = {"supports": "Potkrepljuje", "contradicts": "Protivreči", "context": "Kontekst"}
+ROLE_LABEL = {"supports": "Supports", "contradicts": "Contradicts", "context": "Context"}
 
 
 def render_citation(citation: Citation, source: DossierSource) -> str:
@@ -39,7 +39,7 @@ def render_citation(citation: Citation, source: DossierSource) -> str:
         else ""
     )
     year = (
-        f"<small>Godina izdanja {source.publication_year}</small>"
+        f"<small>Publication year {source.publication_year}</small>"
         if (source.publication_year is not None)
         else ""
     )
@@ -55,28 +55,28 @@ def render_observation(row: Observation, sources: dict[str, DossierSource]) -> s
         )
         if evidence.via and evidence.intermediary:
             intermediary = render_citation(evidence.via, evidence.intermediary)
-            citation += f'<div class="via">Prema posredniku<br>{intermediary}</div>'
+            citation += f'<div class="via">Via intermediary<br>{intermediary}</div>'
         reason = evidence.locator_unavailable_reason
         item = f"<strong>{ROLE_LABEL[evidence.role]}</strong><br>{citation}"
         if reason:
-            item += f"<small>Nedostupan lokator. {escape(reason)}</small>"
+            item += f"<small>Locator unavailable. {escape(reason)}</small>"
         item += f"<small>{escape(evidence.passage)}</small>"
         items.append(f"<li>{item}</li>")
     evidence_html = f"<ul>{''.join(items)}</ul>"
 
     review = row.review
-    label = VERDICT_LABEL[review.verdict] if review else "Čeka proveru"
+    label = VERDICT_LABEL[review.verdict] if review else "Awaiting review"
     status = (
         f'<span class="status">{STATUS_LABEL[row.status]}</span>'
-        f"<small>Pouzdanost: {CONFIDENCE_LABEL[row.confidence]}</small>"
+        f"<small>Confidence: {CONFIDENCE_LABEL[row.confidence]}</small>"
     )
     if row.expert_review:
         expert = row.expert_review
         status += (
-            f"<small>Stručna provera: {escape(expert.reviewer)} "
+            f"<small>Expert review: {escape(expert.reviewer)} "
             f"({expert.checked_on.isoformat()})</small>"
         )
-    status += f"<small>Urednička provera izvora: {label}</small>"
+    status += f"<small>Editorial source review: {label}</small>"
     if review:
         status += (
             f"<small>{escape(review.reviewer)} · {review.checked_on.isoformat()}</small>"
@@ -84,16 +84,16 @@ def render_observation(row: Observation, sources: dict[str, DossierSource]) -> s
         )
     details = ""
     if row.disagreement_notes:
-        details += f"<small>Neslaganje: {escape(row.disagreement_notes)}</small>"
+        details += f"<small>Disagreement: {escape(row.disagreement_notes)}</small>"
     if row.estimate:
         estimate = row.estimate
         bounds = f"{estimate.low}–{estimate.high}" if estimate.low is not None else ""
         value = str(estimate.value) if estimate.value is not None else bounds
         if estimate.value is not None and bounds:
             value += f" ({bounds})"
-        qualifier = "oko " if estimate.approximate else ""
+        qualifier = "about " if estimate.approximate else ""
         details += (
-            f"<small>Procena: {qualifier}{value} {escape(estimate.unit)}. "
+            f"<small>Estimate: {qualifier}{value} {escape(estimate.unit)}. "
             f"{escape(estimate.counted_population)}. "
             f"{escape(estimate.counting_definition)}</small>"
         )
@@ -113,23 +113,23 @@ def render_dossier(dossier: Dossier) -> str:
         title = escape(comparison.topic)
         sections.append(
             f'<section><h2>{title}</h2><div class="scroll"><table aria-label="{title}">'
-            "<thead><tr><th scope='col'>Perspektiva</th><th scope='col'>Navod</th>"
-            "<th scope='col'>Izvor i lokator</th><th scope='col'>Urednička provera</th>"
+            "<thead><tr><th scope='col'>Perspective</th><th scope='col'>Observation</th>"
+            "<th scope='col'>Source and locator</th><th scope='col'>Editorial review</th>"
             f"</tr></thead><tbody>{rows}</tbody></table></div></section>"
         )
     dossier_id = escape(dossier.dossier_id)
     navigation = (
-        '<a href="/reviews">Svi dosijei</a> '
-        f'<a href="/api/v1/reviews/{dossier_id}">JSON dosijea</a>'
+        '<a href="/reviews">All dossiers</a> '
+        f'<a href="/api/v1/reviews/{dossier_id}">Dossier JSON</a>'
     )
     return render_review_template(dossier.title, dossier.summary, "".join(sections), navigation)
 
 
 def render_review_index(dossiers: list[Dossier], query: str, matches: list[ReviewMatch]) -> str:
     field = (
-        '<form action="/reviews" method="get"><label for="query">Pretraži navode</label><br>'
+        '<form action="/reviews" method="get"><label for="query">Search observations</label><br>'
         f'<input id="query" name="q" maxlength="160" value="{escape(query)}" '
-        'placeholder="Na primer: Beogradska kapija"><button>Pretraži</button></form>'
+        'placeholder="Example: cannons captured in 1716"><button>Search</button></form>'
     )
     dossier_links = "".join(
         f'<section><h2><a href="/reviews/{escape(dossier.dossier_id)}">'
@@ -147,17 +147,15 @@ def render_review_index(dossiers: list[Dossier], query: str, matches: list[Revie
                 f"{escape(row.citation.locator)}</small></li>"
             )
         result = (
-            f"<h2>Pronađeni navodi</h2><ol>{''.join(hits)}</ol>"
+            f"<h2>Matching observations</h2><ol>{''.join(hits)}</ol>"
             if hits
-            else ("<p>U dostupnim dosijeima nema odgovarajućih navoda.</p>")
+            else ("<p>No matching observations in the available dossiers.</p>")
         )
         field += f"<section>{result}</section>"
     answer_form = (
         files(__package__).joinpath("review_data", "answer.html").read_text(encoding="utf-8")
     )
-    return render_review_template(
-        "Istraživački dosijei", "", answer_form + field + dossier_links, ""
-    )
+    return render_review_template("Research dossiers", "", answer_form + field + dossier_links, "")
 
 
 def render_review_template(title: str, summary: str, sections: str, navigation: str) -> str:

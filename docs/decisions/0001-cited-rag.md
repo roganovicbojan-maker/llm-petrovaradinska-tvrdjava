@@ -1,7 +1,7 @@
-# ADR 0001 · RAG zasnovan na citatima
+# ADR 0001 — Retrieval-augmented generation with citations
 
-Status: prihvaćeno.
+Status: Accepted.
 
-Početni izazov je povezivanje odgovora sa proverljivim odlomcima u višejezičnoj i potencijalno protivrečnoj građi. Usvajamo RAG kao planiranu arhitekturu. Katalog izvora, tvrdnje i pravila provere razvijamo prvi. Ugovor između aplikacije i generatora omogućava kasnije dodavanje lokalnih i komercijalnih adaptera.
+Adopt retrieval-augmented generation to connect answers to verifiable passages in a multilingual corpus whose sources may disagree. Develop the catalog, claim model, and validation rules first. The application-to-generator interface supports later additions of local and commercial adapters.
 
-Kvalitet odgovora ocenjuje se na osnovu pronalaženja relevantnih izvora, tačnosti citata i predstavljanja neslaganja. Izbor generatora i indeksa sledi nakon formiranja i evaluacije pilot-korpusa.
+Evaluate retrieval relevance, citation accuracy, and representation of disagreements. Select the generator and index using the results of the pilot corpus evaluation.
