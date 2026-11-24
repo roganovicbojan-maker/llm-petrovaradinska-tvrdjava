@@ -281,6 +281,7 @@ SEARCH_ALIASES = {
     "redeponovan": "redepozicija",
     "opsade": "opsada",
     "opsadu": "opsada",
+    "artiljerija": "topova",
     "topovi": "topova",
     "topove": "topova",
     "topovima": "topova",
@@ -304,6 +305,7 @@ SEARCH_ALIASES = {
     "karagoza": "karagoz",
     "bici": "bitka",
     "bitke": "bitka",
+    "bitku": "bitka",
     "procena": "procene",
     "ottoman": "osmanlije",
     "ottomans": "osmanlije",
@@ -326,6 +328,9 @@ SEARCH_ALIASES = {
     "kusatmasi": "opsada",
 }
 QUERY_CONTEXT = {
+    "broja",
+    "postoje",
+    "procene",
     "petrovaradin",
     "petrovaradina",
     "petrovaradinu",

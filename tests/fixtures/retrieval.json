@@ -264,5 +264,21 @@
   {
     "query": "Ko je komandovao svemirskom flotom kod Petrovaradina?",
     "expected": []
+  },
+  {
+    "query": "Koje procene broja topova postoje za bitku kod Petrovaradina 1716?",
+    "expected": [
+      "artillery-eugene",
+      "artillery-nusretname",
+      "artillery-vienna"
+    ]
+  },
+  {
+    "query": "Које процене броја топова постоје за битку код Петроварадина 1716?",
+    "expected": [
+      "artillery-eugene",
+      "artillery-nusretname",
+      "artillery-vienna"
+    ]
   }
 ]
