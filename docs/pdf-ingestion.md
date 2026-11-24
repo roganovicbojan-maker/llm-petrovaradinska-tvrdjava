@@ -1,6 +1,6 @@
-# Urednički pregled PDF izvora
+# PDF ingestion and editorial review
 
-Sledeće komande su za Git Bash u korenu repozitorijuma.
+Run the following commands from the repository root in Git Bash.
 
 ```bash
 ./.venv/Scripts/python.exe -m pip install -e ".[pdf]"
@@ -8,43 +8,31 @@ Sledeće komande su za Git Bash u korenu repozitorijuma.
   --output .pdf-review/extraction.json
 ```
 
-Može se proslediti i jedan PDF. Izveštaj beleži izdanja po SHA-256 kontrolnom
-zbiru, strane i odlomke, dokumente sa greškom i strane bez izdvojenog teksta.
-Broj strane je redni broj PDF strane od 1. Štampana paginacija može da se
-razlikuje. Isti PDF pod drugim imenom obrađuje se jednom u izveštaju.
+The input can also be a single PDF. The report records filenames, SHA-256 checksums, pages, passages, failed documents, and pages without extracted text. PDF page numbering starts at 1 and may differ from printed page labels. Files with identical content appear once.
 
-Za skenirane strane koristi OCRmyPDF sa odgovarajućim jezičkim paketima za
-konkretno izdanje. Na primer, sa instaliranim nemačkim paketom:
+For scans, use OCRmyPDF with language packs appropriate to the edition. This example assumes the German language pack is installed.
 
 ```bash
-ocrmypdf --skip-text -l deu tvrdjava/sken.pdf .pdf-review/sken-ocr.pdf
+ocrmypdf --skip-text -l deu tvrdjava/scan.pdf .pdf-review/scan-ocr.pdf
 ./.venv/Scripts/python.exe -m llm_petrovaradinska_tvrdjava.ingest extract \
-  .pdf-review/sken-ocr.pdf --ocr-input --output .pdf-review/sken.json
+  .pdf-review/scan-ocr.pdf --ocr-input --output .pdf-review/scan.json
 ```
 
-Proveri OCR prema slici originala. Odlomci su kandidati i pri višestubačnom
-prelomu ili lošem OCR-u mogu imati pogrešan redosled reči. Program čuva
-kontrolni zbir obrađenog PDF-a. Kod OCR kopije zabeleži vezu ka originalu
-u uredničkim beleškama.
+Check OCR against page images. Multi-column layout and low-quality OCR can scramble reading order. The checksum identifies the processed input. For an OCR derivative, record its relationship to the original in the editorial notes.
 
-1. Izaberi `passage_id`, proveri da je PDF izdanje koje odgovara postojećem
-   `source_id` i uporedi odlomak sa originalom.
-2. Napiši predlog tvrdnje i sažetu parafrazu na osnovu tog odlomka.
+1. Select a `passage_id` and verify that the edition matches the existing `source_id`.
+2. Draft a claim and a short paraphrase supported by the selected passage.
 
 ```bash
 ./.venv/Scripts/python.exe -m llm_petrovaradinska_tvrdjava.ingest draft \
   .pdf-review/extraction.json --output .pdf-review/draft.json \
-  --passage-id '<ID iz izveštaja>' --source-id '<ID izvora iz kataloga>' \
-  --claim-id '<novi ID tvrdnje>' --topic '<tema>' --location 'Petrovaradin' \
-  --statement '<predlog tvrdnje>' --paraphrase '<parafraza izvora>' \
-  --locator '<štampana strana>'
+  --passage-id '<ID from extraction report>' --source-id '<catalog source ID>' \
+  --claim-id '<new claim ID>' --topic '<topic>' --location 'Petrovaradin' \
+  --statement '<draft claim>' --paraphrase '<source paraphrase>' \
+  --locator '<printed page number>'
 ```
 
-3. Pregledaj izdanje, lokator, prava, formulaciju i ulogu dokaza. Nacrt nosi
-   status `unknown`. Posle pregleda ručno prenesi odobreni zapis iz polja
-   `claim` u katalog i, po potrebi, upiši njegov ID u odgovarajući dosije.
-4. Pokreni `./.venv/Scripts/python.exe tools/validate_catalog.py` pre commita.
+3. Review the edition, locator, rights, wording, and evidence role. Drafts are marked `unknown`. After editorial review, copy the approved `claim` field into the catalog and add its ID to the relevant dossier as needed.
+4. Run `./.venv/Scripts/python.exe tools/validate_catalog.py` before committing.
 
-Folderi `tvrdjava/` i `.pdf-review/` su lokalni. Izveštaji o ekstrakciji mogu
-sadržati pun tekst publikacija. Za javni katalog pripremi metapodatke i
-parafraze koje mogu da se objave.
+The `tvrdjava/` and `.pdf-review/` directories are local. Extraction reports may contain complete publications. Prepare publishable metadata and paraphrases for the public catalog.

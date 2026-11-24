@@ -1,49 +1,21 @@
-# Katalog izvora i tvrdnji
+# Source and claim catalog
 
-[catalog.json](../../src/llm_petrovaradinska_tvrdjava/review_data/catalog.json) koristi verziju 2. Ugovor je definisan Pydantic modelima u
-`src/llm_petrovaradinska_tvrdjava/models.py`. Za JSON Schema pokrenite
-`validate-catalog --json-schema > catalog.schema.json`.
+The [bundled catalog](../../src/llm_petrovaradinska_tvrdjava/review_data/catalog.json) uses schema version 2. Pydantic models in `src/llm_petrovaradinska_tvrdjava/models.py` define the contract. To export the schema, run `python tools/validate_catalog.py --json-schema > catalog.schema.json` from the repository root using the project interpreter.
 
-- `derived_from` sadrži sve poznate neposredne izvore na kojima zapis počiva.
-  Svaki ID mora da postoji, a ciklusi se odbijaju.
-- Za `confirmed` su potrebna dva potvrđujuća odlomka čiji skupovi korenskih izvora
-  nemaju presek i čiji su koreni prihvatljivi kao dokaz. Ova provera koristi
-  upisano poreklo. Urednik i dalje proverava da li je poreklo potpuno i da li
-  odlomci podržavaju tvrdnju.
-- `evidence` je lista sa ulogama `supports`, `contradicts` i `context`.
-  Za nedostupan lokator upišite razlog. Odlomci procenjenih tvrdnji moraju biti
-  provereni u originalu. Kod protivurečnih procena zabeležite zaseban podatak
-  za svaku procenu, uz jedinicu, grupu i definiciju brojanja.
-- Za jezik koristite važeće oznake BCP 47, a za pismo registrovanu oznaku ISO 15924.
-  Za citate iz izvora sa nepoznatim ili zaštićenim pravima validator dopušta do
-  15 reči po odlomku. Urednik proverava pravo objavljivanja i ukupan korišćeni obim.
-- Čuvajte izvorni datum i kalendar. Numeričke granice se odnose na deklarisani
-  kalendar. Normalizovane gregorijanske granice koriste `YYYY`, `YYYY-MM` ili
-  `YYYY-MM-DD` uz jednu deklarisanu preciznost. Za konverzije navedite metod i
-  korišćenu konvenciju. Urednik unosi konverziju, a validator proverava oblik,
-  postojanje datuma i redosled granica.
-- Arheološka starost ide u `dating` uz metod, jedinicu i grešku kada je objavljena.
-  `ka` označava hiljade godina, `cal_years_bp` kalibrisane godine pre sadašnjosti.
-  Datovan sediment i artefakt imaju različit dokazni domet.
-- `Place` podržava istorijske varijante imena, Wikidata QID i par koordinata.
+- List all known immediate ancestors in `derived_from`. Each source ID must exist. Cycles are rejected.
+- A `confirmed` claim needs two supporting passages with disjoint sets of eligible root sources. The check uses recorded provenance. The editor checks its completeness and whether the passages support the claim.
+- Evidence roles are `supports`, `contradicts`, and `context`. Supply `locator_unavailable_reason` for an unavailable locator. Passages for assessed claims must be checked against the original. Keep conflicting estimates separate and include units, counted populations, and counting definitions.
+- Use registered BCP 47 language tags and ISO 15924 script codes. The validator allows up to 15 words per quotation from sources with unknown or restricted rights. The editor checks publication rights and total usage.
+- Preserve the original date and calendar. Numeric bounds use the declared calendar. Normalized Gregorian values use `YYYY`, `YYYY-MM`, or `YYYY-MM-DD` with the corresponding precision. Document the conversion method and convention. The validator checks format, date validity, and order, and compares directly comparable Gregorian values.
+- Use `dating` for archaeological ages. Include the method, unit, and published uncertainty. `ka` means thousands of years and `cal_years_bp` means calibrated years before present. Distinguish the inference from dated sediment from direct dating of an artefact.
+- `Place` supports historical aliases, Wikidata IDs, and a coordinate pair.
 
-## Prelazak sa verzije 1
+## Migration from version 1
 
-Pretvorite jedini `evidence` u listu. Odlomcima iz `supporting_evidence` i
-`contradicting_evidence` dodelite odgovarajuću ulogu, a preostalom primarnom odlomku
-ulogu prema sadržaju. Isti odlomak evidentirajte jednom. Datum bez numeričke granice
-sačuvajte uz potkrepljenu normalizaciju ili kao izvorni izraz uz arheološko datovanje.
-Zatim postavite `schema_version` na `2` i pokrenite validator.
+Convert the single `evidence` record into a list. Assign roles to records from `supporting_evidence` and `contradicting_evidence`, and select the role of the original passage according to its content. Record each passage once. For a date without a numeric bound, supply a supported normalization or preserve the original expression as part of an archaeological dating record. Set `schema_version` to `2` and run the validator.
 
-## Dosijei
+## Dossiers
 
-Katalog je jedini zapis izvora i navoda. Elementi `dossiers` povezuju naslove
-i sazetke dosijea sa `claim_ids`. Javni dosije prikazuje sve dokaze.
-Prvi dokaz popunjava i starija polja `citation` i `via` zbog kompatibilnosti API-ja.
-Za `via` katalog zahteva put od posrednika do izvora preko `derived_from`,
-uz lokator u izdanju posrednika. Urednik proverava da taj odlomak prenosi navod.
-Za `locator_kind: unavailable` upiši `locator_unavailable_reason`.
-Gregorijanska godina i izvorni izraz u ISO formatu proveravaju se gde su direktno uporedivi.
-`editorial_review` belezi urednicku proveru prenosa navoda.
-Strucnu potvrdu tvrdnje odvojeno beleze `review` i `status`.
-Migrirani navodi bez dokumentovane provere imaju status `unknown`.
+The catalog is the source of truth for claims and sources. Dossiers group `claim_ids` under titles and summaries. The public dossier shows all evidence. Its first evidence link also populates the legacy `citation` and `via` fields for API compatibility.
+
+A `via` citation requires a `derived_from` path from the intermediary to the source and a locator in the intermediary edition. Check that the intermediary actually conveys the observation. Use `editorial_review` to record the editorial check of how the observation was reported. Use `review` and `status` for expert assessment. Migrated observations without documented assessment use `unknown`.

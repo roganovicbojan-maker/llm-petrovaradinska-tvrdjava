@@ -1,7 +1,7 @@
-# ADR 0002 · Verzije kataloga i HTTP API-ja
+# ADR 0002 — Catalog and HTTP API versions
 
-Status: prihvaćeno.
+Status: Accepted.
 
-Početni katalog uveden je kao jedan JSON dokument sa `schema_version: 1`. Od verzije 2 katalog koristi listu dokaza sa ulogama i graf deklarisanog porekla izvora. Pravila i prelazak opisani su u [README-u kataloga](../../data/catalog/README.md).
+The original catalog was a single JSON document with `schema_version: 1`. Version 2 uses evidence links with explicit roles and a declared source-provenance graph. See [the catalog guide](../../data/catalog/README.md) for validation and migration rules.
 
-Operativni `/health` ostaje izvan verzionisanog javnog API-ja. Javni ugovor počinje od `/api/v1`, a verzija paketa i revizija šeme kataloga imaju zasebne namene.
+The operational endpoint `/health` sits outside the versioned API. The public contract begins at `/api/v1`. The package version and catalog schema revision serve separate purposes.

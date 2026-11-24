@@ -1,20 +1,13 @@
-# Podaci
+# Data
 
-Katalog sadrži bibliografske metapodatke i stručno pregledane tvrdnje kada su dostupne. Legalno pribavljene radne kopije držite lokalno u `data/documents/`. Njihove putanje moraju biti relativne i zabeležene uz obrazloženje zakonitog pribavljanja. Pravo pristupa kopiji može se razlikovati od prava objavljivanja odlomka.
+The catalog contains bibliographic metadata and expert-reviewed claims where available. Keep lawfully acquired working copies locally in `data/documents/`. Record relative file paths and the basis on which the copy was obtained. Check publication rights separately from lawful access.
 
-Git pod `data/` prati dokumentaciju. Katalog je resurs Python paketa. Skenovi, puni tekstovi, izvodi OCR-a i lokalni indeksi pripadaju lokalnom skladištu. Posebno proverite obim odlomaka i pravo na njihovo objavljivanje pre upisa u javni katalog.
+Git tracks documentation under `data/`. The catalog ships as a Python package resource. Keep scans, complete texts, OCR output, and local indexes in local storage. Check the permitted length and publication rights of each excerpt before adding it to the public catalog.
 
-Pogledajte [uputstvo za katalog](catalog/README.md).
+See [the catalog guide](catalog/README.md).
 
-## Licenciranje
+## Licensing
 
-Kod i autorska dokumentacija projekta objavljeni su pod [MIT licencom](../LICENSE).
-Autorski metapodaci projekta dostupni su pod [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-Za atribuciju navedi Bojana Roganovića, naziv projekta, vezu do repozitorijuma
-i eventualne izmene.
+Code and original project documentation are distributed under the [MIT License](../LICENSE). Original project metadata is available under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Attribution should include Bojan Roganović, the project name, the repository link, and any modifications.
 
-Izvorna istorijska građa, reprodukcije, prevodi i citati trećih lica imaju
-sopstveni režim prava. Licenca projekta ih ne obuhvata. Za svaki izvor
-proveri `copyright_status`, uslove ustanove ili nosioca prava i osnov
-`lawful_access_basis` za radnu kopiju. Vrednost `unknown` označava da je status
-prava potrebno utvrditi. Skenovi i radne kopije ostaju izvan repozitorijuma.
+Historical material, reproductions, translations, and third-party quotations carry their own rights. Check `copyright_status`, any rights-holder or institutional terms, and the `lawful_access_basis` for working copies. An `unknown` status requires further review. Scans and working copies stay outside the repository.

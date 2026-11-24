@@ -1,12 +1,12 @@
 <section aria-labelledby="answer-title">
-  <h2 id="answer-title">Pitanje o tvrđavi</h2>
-  <p>AI odgovor je generisan. Automatska provera povezuje citate sa pronađenim zapisima
-    i proverava brojeve. Za istorijsku ocenu pogledaj stručnu proveru u dosijeu.</p>
+  <h2 id="answer-title">Ask about the fortress</h2>
+  <p>AI-generated answers link to retrieved records and undergo numerical checks.
+    See the dossier for any expert assessment.</p>
   <form id="answer-form" action="/api/v1/answers" method="post">
-    <label for="answer-question">Postavi pitanje</label><br>
+    <label for="answer-question">Enter a question</label><br>
     <input id="answer-question" name="question" required maxlength="160"
-           placeholder="Šta je predloženo za 1754?">
-    <button>Odgovori iz izvora</button>
+           placeholder="How many cannons were captured in 1716?">
+    <button>Answer from sources</button>
   </form>
   <p id="answer-status" role="status"></p>
   <div id="answer-result"></div>
@@ -20,13 +20,13 @@
     event.preventDefault();
     const question = new FormData(answerForm).get("question").trim();
     if (!question) {
-      answerStatus.textContent = "Unesi pitanje.";
+      answerStatus.textContent = "Enter a question.";
       return;
     }
     const button = answerForm.querySelector("button");
     button.disabled = true;
     answerResult.replaceChildren();
-    answerStatus.textContent = "Tražim izvore i sastavljam odgovor…";
+    answerStatus.textContent = "Searching sources and drafting an answer…";
 
     try {
       const response = await fetch(answerForm.action, {
@@ -37,16 +37,16 @@
       const data = await response.json();
       if (!response.ok) {
         answerStatus.textContent = typeof data.detail === "string" ? data.detail :
-          "Odgovor trenutno nije dostupan.";
+          "The answer is currently unavailable.";
         return;
       }
       if (data.status === "insufficient_evidence") {
-        answerStatus.textContent = "Dostupni dosijei nemaju dovoljno dokaza za odgovor.";
+        answerStatus.textContent = "The available dossiers contain insufficient evidence to answer.";
         return;
       }
       answerStatus.textContent = data.verification === "model_checked"
-        ? "Generisan odgovor. Podršku iskazu proverio je model."
-        : "Generisan odgovor. Iskaz se poklapa sa citiranim zapisom.";
+        ? "Generated answer. A model checked whether the evidence supports the claims."
+        : "Generated answer. The claim matches the cited record.";
       const references = new Map(data.references.map(ref => [ref.evidence_id, ref.match]));
       const list = document.createElement("ul");
       for (const claim of data.claims) {
@@ -68,12 +68,12 @@
           source.append(link);
           const status = document.createElement("small");
           status.textContent = match.observation.expert_review
-            ? "Stručna provera navoda: " + match.observation.expert_review.checked_on
-            : "Navod nema evidentiranu stručnu proveru.";
+            ? "Expert review: " + match.observation.expert_review.checked_on
+            : "No expert review is recorded for this observation.";
           source.append(status);
           for (const evidence of match.observation.evidence) {
             const entry = document.createElement("small");
-            const labels = {supports: "Potkrepljuje", contradicts: "Protivreči", context: "Kontekst"};
+            const labels = {supports: "Supports", contradicts: "Contradicts", context: "Context"};
             entry.textContent = labels[evidence.role] + " · " + evidence.source.title
               + " · " + evidence.locator;
             source.append(entry);
@@ -81,7 +81,7 @@
           for (const evidence of cited) {
             if (!evidence.intermediary) continue;
             const via = document.createElement("small");
-            via.textContent = "Prema posredniku: " + evidence.intermediary.title +
+            via.textContent = "Via intermediary: " + evidence.intermediary.title +
               " · " + evidence.via.locator;
             source.append(via);
           }
@@ -93,9 +93,9 @@
       answerResult.append(list);
       for (const comparison of data.estimate_comparisons || []) {
         const heading = document.createElement("h3");
-        heading.textContent = "Različite procene u katalogu: " + comparison.topic;
+        heading.textContent = "Different estimates in the catalog: " + comparison.topic;
         const scope = document.createElement("p");
-        scope.textContent = "Izvori mogu brojati različite kategorije. Proveri obuhvat svake procene.";
+        scope.textContent = "Sources may count different categories. Check what each estimate includes.";
         const estimates = document.createElement("ul");
         for (const item of comparison.estimates) {
           const row = document.createElement("li");
@@ -106,7 +106,7 @@
           const e = item.estimate;
           const quantity = e.low != null ? e.low + "–" + e.high : e.value;
           const details = document.createElement("p");
-          details.textContent = (e.approximate ? "oko " : "") + quantity + " " + e.unit +
+          details.textContent = (e.approximate ? "about " : "") + quantity + " " + e.unit +
             " · " + e.counted_population + " · " + e.counting_definition;
           row.append(link, details);
           estimates.append(row);
@@ -114,7 +114,7 @@
         answerResult.append(heading, scope, estimates);
       }
     } catch {
-      answerStatus.textContent = "Došlo je do greške pri učitavanju odgovora.";
+      answerStatus.textContent = "An error occurred while loading the answer.";
     } finally {
       button.disabled = false;
     }

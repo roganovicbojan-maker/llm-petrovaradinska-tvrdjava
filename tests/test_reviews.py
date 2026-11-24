@@ -31,7 +31,7 @@ def test_review_keeps_different_source_values_and_provenance() -> None:
     assert osman["via"]["source_id"] == "karagoz-2014"
     assert osman["review"] is None
     assert "160 ostavljenih topova" in page.text
-    assert "Čeka proveru" in page.text
+    assert "Awaiting review" in page.text
 
 
 def test_bad_intermediary_is_rejected() -> None:
@@ -69,7 +69,7 @@ def test_disputed_claim_includes_both_sides_in_html_and_api() -> None:
     assert row["status"] == "disputed"
     assert row["estimate"]["value"] == "100"
     assert [item["role"] for item in row["evidence"]] == ["supports", "contradicts"]
-    for label in ("Sporno", "Protivreči", "Synthetic opposing locator", "2026-11-20"):
+    for label in ("Disputed", "Contradicts", "Synthetic opposing locator", "2026-11-20"):
         assert label in html
 
 
