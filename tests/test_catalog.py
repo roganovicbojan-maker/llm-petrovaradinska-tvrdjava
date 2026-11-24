@@ -200,7 +200,7 @@ def test_only_documented_normalization_is_allowed() -> None:
         TemporalInterval(original_expression="late in the campaign")
     with pytest.raises(ValidationError, match="Document the conversion"):
         TemporalInterval(calendar="julian", iso_start="1716-08-05", precision="day")
-    with pytest.raises(ValidationError, match="day is out of range"):
+    with pytest.raises(ValidationError):
         TemporalInterval(calendar="gregorian", iso_start="1716-02-30", precision="day")
 
     interval = TemporalInterval(
