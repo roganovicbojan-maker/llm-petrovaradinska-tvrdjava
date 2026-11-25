@@ -17,8 +17,10 @@ from .answers import (
     AnswerResult,
     AnswerVerifier,
     InvalidAnswerError,
+    ModelTimeoutError,
     ModelUnavailableError,
     answer_question,
+    catalog_answer,
     generate_with_ollama,
     verify_with_ollama,
 )
@@ -133,6 +135,9 @@ def create_app(
         response.headers["X-Fortress-Retrieval"] = retrieval
         if not matches and index is None:
             return AnswerResult(status="insufficient_evidence")
+        catalog_result = catalog_answer(request.question, matches)
+        if catalog_result is not None:
+            return catalog_result
         if generate is None:
             raise HTTPException(status_code=503, detail="Configure a local Ollama model in .env.")
         if not slots.acquire(blocking=False):
@@ -152,13 +157,18 @@ def create_app(
                 except EmbeddingError:
                     logger.warning("Embedding query failed; using lexical retrieval", exc_info=True)
             return answer_question(request.question, matches, generate, verifier)
+        except ModelTimeoutError as error:
+            logger.warning("Ollama answer request timed out")
+            raise HTTPException(
+                status_code=503, detail="The local model did not answer in time."
+            ) from error
         except ModelUnavailableError as error:
             logger.warning("Ollama generation unavailable", exc_info=error)
             raise HTTPException(
                 status_code=503, detail="The local model is unavailable."
             ) from error
         except InvalidAnswerError as error:
-            logger.warning("Ollama answer rejected")
+            logger.warning("Ollama answer rejected: %s", error)
             raise HTTPException(
                 status_code=502, detail="Citation or evidence validation failed."
             ) from error

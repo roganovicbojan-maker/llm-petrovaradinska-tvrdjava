@@ -9,7 +9,7 @@ from pydantic import Field, StrictBool
 from .estimates import EstimateComparison, compare_estimates
 from .models import Record, RecordId, Text
 from .numbers import numeric_ranges, numeric_tokens
-from .reviews import ReviewMatch
+from .reviews import QUERY_CONTEXT, ReviewMatch, search_terms
 
 MAX_MODEL_RESPONSE = 256 * 1024
 
@@ -50,11 +50,11 @@ class AnswerReference(Record):
 
 
 class AnswerResult(Record):
-    status: Literal["answered", "insufficient_evidence"]
+    status: Literal["answered", "catalog_matches", "insufficient_evidence"]
     claims: list[AnswerClaim] = Field(default_factory=list)
     references: list[AnswerReference] = Field(default_factory=list)
     estimate_comparisons: list[EstimateComparison] | None = None
-    verification: Literal["catalog_excerpt", "model_checked"] | None = None
+    verification: Literal["catalog_comparison", "catalog_excerpt", "model_checked"] | None = None
 
 
 AnswerGenerator = Callable[[str, list[AnswerReference]], DraftAnswer]
@@ -79,8 +79,41 @@ class ModelUnavailableError(Exception):
     """Ollama is unavailable or the model could not start."""
 
 
+class ModelTimeoutError(ModelUnavailableError):
+    """Ollama did not respond within the configured timeout."""
+
+
 class InvalidAnswerError(Exception):
     """The model response failed schema or citation validation."""
+
+
+def catalog_answer(question: str, matches: list[ReviewMatch]) -> AnswerResult | None:
+    if not matches:
+        return None
+    if re.fullmatch(r"[0-9]{4}", question.strip()):
+        return AnswerResult(status="catalog_matches")
+
+    query_terms = search_terms(question)
+    terms = {term for term in query_terms - QUERY_CONTEXT if not term.isdecimal()}
+    # Use the catalog directly for generic requests to compare artillery estimates.
+    if "topova" not in terms or "procene" not in query_terms:
+        return None
+    if terms - {"topova", "bitka"}:
+        return None
+    comparisons = compare_estimates(matches, matches)
+    if len(comparisons) != 1:
+        return None
+    comparison_ids = {item.observation_id for item in comparisons[0].estimates}
+    if comparison_ids != {match.observation.observation_id for match in matches}:
+        return None
+    return AnswerResult(
+        status="answered",
+        estimate_comparisons=comparisons,
+        verification="catalog_comparison",
+        references=[
+            AnswerReference(evidence_id=i, match=match) for i, match in enumerate(matches, start=1)
+        ],
+    )
 
 
 def answer_question(
@@ -275,6 +308,8 @@ def request_ollama[Response: Record](
                     payload.extend(chunk)
                     if len(payload) > MAX_MODEL_RESPONSE:
                         raise InvalidAnswerError("The model response exceeded the size limit")
+    except httpx.TimeoutException as error:
+        raise ModelTimeoutError("Ollama request timed out") from error
     except httpx.HTTPError as error:
         raise ModelUnavailableError("Cannot reach the local Ollama service") from error
     try:
