@@ -80,6 +80,8 @@ def test_ollama_failure_is_mapped_to_public_status(
         response = client.post("/api/v1/answers", json={"question": "Topova 1716"})
         assert response.status_code == expected
         assert response.json()["detail"]
+        if failure == "timeout":
+            assert "did not answer in time" in response.json()["detail"]
         assert client.get("/ready").status_code == 200
 
 
@@ -338,3 +340,31 @@ def test_answer_preserves_estimate_scope_and_citations() -> None:
     assert [int(item.estimate.value) for item in estimates] == [100, 160, 175]
     assert len({item.citation.source_id for item in estimates}) == 3
     assert len({item.estimate.counting_definition for item in estimates}) == 3
+
+
+@pytest.mark.parametrize(
+    "question",
+    [
+        "Koje procene broja topova postoje za bitku kod Petrovaradina 1716",
+        "Које процене броја топова постоје за битку код Петроварадина 1716?",
+    ],
+)
+def test_artillery_comparison_is_available_without_ollama(question: str) -> None:
+    with TestClient(create_app(settings=Settings())) as client:
+        response = client.post("/api/v1/answers", json={"question": question})
+    assert response.status_code == 200
+    body = response.json()
+    assert body["verification"] == "catalog_comparison"
+    assert body["claims"] == []
+    (comparison,) = body["estimate_comparisons"]
+    assert {item["estimate"]["value"] for item in comparison["estimates"]} == {"100", "160", "175"}
+    assert all(item["citation"]["locator"] for item in comparison["estimates"])
+
+
+def test_year_routes_to_catalog_search_without_ollama() -> None:
+    with TestClient(create_app(settings=Settings())) as client:
+        response = client.post("/api/v1/answers", json={"question": "1716"})
+        assert response.status_code == 200
+        assert response.json()["status"] == "catalog_matches"
+        response = client.post("/api/v1/answers", json={"question": "9999"})
+        assert response.json()["status"] == "insufficient_evidence"

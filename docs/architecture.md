@@ -20,6 +20,8 @@ With no `FORTRESS_EMBEDDING_MODEL`, answers use lexical retrieval. A failed inde
 
 The generator receives observations and their evidence roles. Each claim attributes evidence IDs to a single source ID. Validation rejects references outside the retrieved set, numbers missing from the cited source, and ranges assembled from unrelated quantities. A separate model call checks whether evidence supports the full claim, its attribution and qualifications, and its relevance to the question. This produces a `model_checked` answer. A custom generator without a verifier must match a catalog excerpt and returns `catalog_excerpt`. Historical assessment and expert review are tracked separately in the catalog.
 
+Generic questions comparing artillery estimates can return a structured catalog comparison without a generation call. The response uses verification value catalog_comparison and includes the separate source estimates. A bare year that matches records returns catalog_matches, which the review page links to the search results.
+
 ## Startup and request limits
 
 Start the app with `uvicorn llm_petrovaradinska_tvrdjava.api:create_app --factory`. Process environment variables take precedence over `.env`. A development checkout loads the repository-root `.env`. An installed package uses the process environment or the file specified by the absolute `FORTRESS_ENV_FILE` path.

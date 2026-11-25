@@ -44,7 +44,17 @@
         answerStatus.textContent = "The available dossiers contain insufficient evidence to answer.";
         return;
       }
-      answerStatus.textContent = data.verification === "model_checked"
+      if (data.status === "catalog_matches") {
+        answerStatus.textContent = "A year matches several records. Open the results or ask a specific question.";
+        const link = document.createElement("a");
+        link.href = "/reviews?" + new URLSearchParams({q: question});
+        link.textContent = "Browse matching observations";
+        answerResult.append(link);
+        return;
+      }
+      answerStatus.textContent = data.verification === "catalog_comparison"
+        ? "Comparison from the catalog."
+        : data.verification === "model_checked"
         ? "Generated answer. A model checked whether the evidence supports the claims."
         : "Generated answer. The claim matches the cited record.";
       const references = new Map(data.references.map(ref => [ref.evidence_id, ref.match]));
@@ -90,7 +100,7 @@
         item.append(sources);
         list.append(item);
       }
-      answerResult.append(list);
+      if (list.childElementCount) answerResult.append(list);
       for (const comparison of data.estimate_comparisons || []) {
         const heading = document.createElement("h3");
         heading.textContent = "Different estimates in the catalog: " + comparison.topic;
